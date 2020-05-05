@@ -2,8 +2,6 @@
 
 #if WITH_GAMEPLAY_DEBUGGER
 
-//#define CHECK_ACTUAL_VALUES
-
 #include "AbilitySystemComponent.h"
 #include "GameFramework/Pawn.h"
 
@@ -37,14 +35,6 @@ void FGameplayDebuggerCategory_Attributes::CollectData(APlayerController* OwnerP
 	{
 		CollectAttributes(AttachedDebugActor);
 	}
-
-#ifdef CHECK_ACTUAL_VALUES
-	DebugAttributesOn(DebugActor);
-	for (AActor* AttachedDebugActor : OutAttachedActors)
-	{
-		DebugAttributesOn(AttachedDebugActor);
-	}
-#endif
 }
 
 void FGameplayDebuggerCategory_Attributes::CollectAttributes(AActor* DebugActor)
@@ -66,37 +56,14 @@ void FGameplayDebuggerCategory_Attributes::CollectAttributes(AActor* DebugActor)
 	}
 }
 
-void FGameplayDebuggerCategory_Attributes::DebugAttributesOn(AActor* DebugActor)
-{
-	for (TFieldIterator<UProperty> It(DebugActor->GetClass(), EFieldIteratorFlags::IncludeSuper); It; ++It)
-	{
-		UProperty* Property = *It;
-		UObjectProperty* ObjectProperty = Cast<UObjectProperty>(Property);
-		if (ObjectProperty == nullptr)
-			continue;
-
-		UAttributeSet* DataPtr = Cast<UAttributeSet>(ObjectProperty->GetObjectPropertyValue_InContainer(DebugActor));
-		if (DataPtr == nullptr)
-		{
-			TArray<FStringFormatArg> args;
-			args.Add(FStringFormatArg(ObjectProperty->GetName()));
-			DataPack.DebugStrings.Add(FString::Format(TEXT("{red}{0} is NULL"), args));
-			continue;
-		}
-		
-		DataPack.DebugStrings.Add(TEXT("Actual Values -----"));
-		CollectAttributesFromSet(DataPtr);
-	}
-}
-
 void FGameplayDebuggerCategory_Attributes::CollectAttributesFromSet(UAttributeSet* AttributeSet)
 {
-	for (TFieldIterator<UProperty> It(AttributeSet->GetClass(), EFieldIteratorFlags::IncludeSuper); It; ++It)
+	for (TFieldIterator<FProperty> It(AttributeSet->GetClass(), EFieldIteratorFlags::IncludeSuper); It; ++It)
 	{
-		UProperty* Property = *It;
-		UStructProperty* StructProperty = Cast<UStructProperty>(Property);
-		check(StructProperty);
-		FGameplayAttributeData* DataPtr = StructProperty->ContainerPtrToValuePtr<FGameplayAttributeData>(AttributeSet);
+		FProperty* Property = *It;
+		FStructProperty* StructProperty = CastField<FStructProperty>(Property);
+		FGameplayAttributeData* DataPtr = Property->ContainerPtrToValuePtr<FGameplayAttributeData>(AttributeSet);
+
 		check(DataPtr);
 
 		TArray<FStringFormatArg> args;
@@ -120,8 +87,5 @@ void FGameplayDebuggerCategory_Attributes::DrawData(APlayerController* OwnerPC, 
 		CanvasContext.Printf(TEXT("%s"), *debugInfoString);
 	}
 }
-
-
-
 
 #endif

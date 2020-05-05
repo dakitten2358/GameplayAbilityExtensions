@@ -38,7 +38,7 @@ void FAttributeSetInitializer::InitializeAttributes(UAbilitySystemComponent* Abi
 			continue;
 		}
 
-		UProperty* Property = FindBestAttribute(Set, AttributeName);
+		FProperty* Property = FindBestAttribute(Set, AttributeName);
 		if (!Property)
 		{
 			UE_LOG(LogAxCommon, Warning, TEXT("FAttributeSetInitializer::InitializeAttributes Unable to match Attribute from %s (row: %s)"), *AttributeName, *RowName);
@@ -92,11 +92,11 @@ UAttributeSet* FAttributeSetInitializer::FindBestAttributeSet(TArray<UAttributeS
 	return nullptr;
 }
 
-UProperty* FAttributeSetInitializer::FindBestAttribute(UAttributeSet* AttributeSet, FString PartialName)
+FProperty* FAttributeSetInitializer::FindBestAttribute(UAttributeSet* AttributeSet, FString PartialName)
 {
-	for (TFieldIterator<UProperty> It(AttributeSet->GetClass(), EFieldIteratorFlags::IncludeSuper); It; ++It)
+	for (TFieldIterator<FProperty> It(AttributeSet->GetClass(), EFieldIteratorFlags::IncludeSuper); It; ++It)
 	{
-		UProperty* Property = *It;
+		FProperty* Property = *It;
 		if (Property->GetName() == PartialName)
 		{
 			return Property;

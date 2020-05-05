@@ -10,5 +10,5 @@ public:
 
 private:
 	static UAttributeSet* FindBestAttributeSet(TArray<UAttributeSet*>& AttributeSets, FString PartialName);
-	static UProperty* FindBestAttribute(UAttributeSet* AttributeSet, FString PartialName);
+	static FProperty* FindBestAttribute(UAttributeSet* AttributeSet, FString PartialName);
 };

@@ -28,7 +28,6 @@ protected:
 
 	void CollectAttributes(AActor* DebugActor);
 	void CollectAttributesFromSet(class UAttributeSet* AttributeSet);
-	void DebugAttributesOn(AActor* DebugActor);
 };
 
 #endif
