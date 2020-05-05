@@ -16,6 +16,7 @@ DECLARE_LOG_CATEGORY_EXTERN(LogAxAI, Log, All);
 namespace AxDebug
 {
 	void DrawLineTraceSingle(const UWorld* World, const FVector& Start, const FVector& End, EDrawDebugTrace::Type DrawDebugType, bool bHit, const FHitResult& OutHit, FLinearColor TraceColor = FLinearColor::Red, FLinearColor TraceHitColor = FLinearColor::Green, float DrawTime = -1.0f);
+	void DrawLineTraceMulti(const UWorld* World, const FVector& Start, const FVector& End, EDrawDebugTrace::Type DrawDebugType, bool bHit, const TArray<FHitResult>& OutHits, FLinearColor TraceColor = FLinearColor::Red, FLinearColor TraceHitColor = FLinearColor::Green, float DrawTime = -1.0f);
 	void DrawDirection(const UWorld* World, const FVector& Start, const FVector& Direction, EDrawDebugTrace::Type DrawDebugType, float Distance = 2000.f, FLinearColor DirectionColor = FLinearColor::Yellow, float DrawTime = -1.0f);
 };
 #endif // ENABLE_DRAW_DEBUG

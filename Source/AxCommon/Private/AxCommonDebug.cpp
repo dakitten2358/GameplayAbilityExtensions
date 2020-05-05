@@ -34,6 +34,34 @@ namespace AxDebug
 		}
 	}
 
+	void DrawLineTraceMulti(const UWorld* World, const FVector& Start, const FVector& End, EDrawDebugTrace::Type DrawDebugType, bool bHit, const TArray<FHitResult>& OutHits, FLinearColor TraceColor, FLinearColor TraceHitColor, float DrawTime)
+	{
+		if (DrawDebugType != EDrawDebugTrace::None)
+		{
+			bool bPersistent = DrawDebugType == EDrawDebugTrace::Persistent;
+			float LifeTime = (DrawDebugType == EDrawDebugTrace::ForDuration) ? DrawTime : 0.f;
+
+			// @fixme, draw line with thickness = 2.f?
+			if (bHit && OutHits.Last().bBlockingHit)
+			{
+				// Red up to the blocking hit, green thereafter
+				const FHitResult& BlockingHit = OutHits.Last();
+				::DrawDebugLine(World, Start, BlockingHit.ImpactPoint, TraceColor.ToFColor(true), bPersistent, LifeTime);
+				::DrawDebugLine(World, BlockingHit.ImpactPoint, End, TraceHitColor.ToFColor(true), bPersistent, LifeTime);
+			}
+			else
+			{
+				// no hit means all red
+				::DrawDebugLine(World, Start, End, TraceColor.ToFColor(true), bPersistent, LifeTime);
+			}
+
+			for (const FHitResult& OutHit : OutHits)
+			{
+				::DrawDebugPoint(World, OutHit.ImpactPoint, AX_TRACE_DEBUG_IMPACTPOINT_SIZE, TraceColor.ToFColor(true), bPersistent, LifeTime);
+			}
+		}
+	}
+
 	void DrawDirection(const UWorld* World, const FVector& Start, const FVector& Direction, EDrawDebugTrace::Type DrawDebugType, float Distance, FLinearColor DirectionColor, float DrawTime)
 	{
 		if (DrawDebugType != EDrawDebugTrace::None)
