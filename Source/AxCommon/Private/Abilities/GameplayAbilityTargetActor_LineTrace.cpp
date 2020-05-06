@@ -2,6 +2,7 @@
 #include "Abilities/GameplayAbility.h"
 #include "Abilities/GameplayAbilityTypes.h"
 #include "AbilitySystemComponent.h"
+#include "Engine/NetSerialization.h"
 #include "GameFramework/PlayerController.h"
 #include "AxCommonDebug.h"
 
@@ -358,7 +359,7 @@ void AGameplayAbilityTargetActor_LineTrace::UpdateReticleActorFromHitResult(int3
 			{
 				LocalReticleActor->SetActorHiddenInGame(false);
 
-				const FVector ReticleLocation = (bHitActor && LocalReticleActor->bSnapToTargetedActor) ? HitResult.Actor->GetActorLocation() : HitResult.Location;
+				const FVector ReticleLocation = (bHitActor && LocalReticleActor->bSnapToTargetedActor) ? HitResult.Actor->GetActorLocation() : (FVector)HitResult.Location;
 
 				LocalReticleActor->SetActorLocation(ReticleLocation);
 				LocalReticleActor->SetIsTargetAnActor(bHitActor);
