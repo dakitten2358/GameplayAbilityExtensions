@@ -12,6 +12,8 @@ AGameplayAbilityTargetActor_LineTrace::AGameplayAbilityTargetActor_LineTrace()
 	, bTraceAffectsAimPitch(true)
 	, MaxHitResultsPerTrace(1)
 	, NumberOfTraces(1)
+	, Spread(0.f)
+	, VSpread(0.f)
 	, bIgnoreBlockingHits(false)
 {
 	PrimaryActorTick.bCanEverTick = true;
@@ -126,8 +128,9 @@ TArray<FHitResult> AGameplayAbilityTargetActor_LineTrace::PerformTrace(AActor* I
 
 	for (int32 TraceIndex = 0; TraceIndex < NumberOfTraces; TraceIndex++)
 	{
-		FVector TraceStart = TraceLine.v1;
-		FVector TraceEnd = TraceLine.v2;
+		FTwoVectors SpreadTraceLine = AdjustTraceForSpread(TraceIndex, TraceLine);
+		FVector TraceStart = SpreadTraceLine.v1;
+		FVector TraceEnd = SpreadTraceLine.v2;
 		
 		// Move _this_ actor to the end location (why?)
 		SetActorLocationAndRotation(TraceEnd, SourceActor->GetActorRotation());
@@ -279,6 +282,44 @@ FTwoVectors AGameplayAbilityTargetActor_LineTrace::GetTraceLine_PlayerController
 
 	const FVector End = Start + (AdjustedAimDir * MaxRange);
 	return FTwoVectors(Start, End);
+}
+
+FTwoVectors AGameplayAbilityTargetActor_LineTrace::AdjustTraceForSpread(int32 TraceIndex, const FTwoVectors& TraceLine)
+{
+	if (Spread > KINDA_SMALL_NUMBER || VSpread > KINDA_SMALL_NUMBER)
+	{
+		if (NumberOfTraces == 1)
+		{
+			const float HorizontalConeHalfAngle = FMath::DegreesToRadians(Spread * 0.5f);
+			const float VerticalConeHalfAngle = FMath::DegreesToRadians(VSpread * 0.5f);
+			const int32 RandomSeed = FMath::Rand();
+			FRandomStream WeaponRandomStream(RandomSeed);
+			const FVector ShootDir = WeaponRandomStream.VRandCone((TraceLine.v2 - TraceLine.v1), HorizontalConeHalfAngle, VerticalConeHalfAngle);
+
+			FVector NewTraceEnd = TraceLine.v1 + (ShootDir * MaxRange);
+			return FTwoVectors(TraceLine.v1, NewTraceEnd);
+		}
+		else if (NumberOfTraces > 1)
+		{
+			// distribute them evenly horizontally
+			const int32 RandomSeed = FMath::Rand();
+			FRandomStream WeaponRandomStream(RandomSeed);
+
+			float IncrementPerTrace = Spread / (NumberOfTraces + 2);
+			const FVector TraceDirection = (TraceLine.v2 - TraceLine.v1);
+			FRotator Rotation(0.f, (-Spread * 0.5f)+((1+TraceIndex) * IncrementPerTrace), 0.f);
+			const FVector RotatedTraceDirection = Rotation.RotateVector(TraceDirection);
+
+			const float HorizontalConeHalfAngle = FMath::DegreesToRadians(Spread * 0.5f / NumberOfTraces);
+			const float VerticalConeHalfAngle = FMath::DegreesToRadians(VSpread * 0.5f);
+			const FVector ShootDir = WeaponRandomStream.VRandCone(RotatedTraceDirection, HorizontalConeHalfAngle, VerticalConeHalfAngle);
+
+			FVector NewTraceEnd = TraceLine.v1 + (ShootDir * MaxRange);
+			return FTwoVectors(TraceLine.v1, NewTraceEnd);
+		}
+	}
+
+	return TraceLine;
 }
 
 AGameplayAbilityWorldReticle* AGameplayAbilityTargetActor_LineTrace::SpawnReticleActor(FVector Location, FRotator Rotation)

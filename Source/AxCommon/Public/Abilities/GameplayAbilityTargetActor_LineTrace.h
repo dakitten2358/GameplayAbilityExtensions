@@ -48,6 +48,12 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, meta = (ExposeOnSpawn = true), Category = Trace)
 	int32 NumberOfTraces;
 
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, meta = (ExposeOnSpawn = true, ToolTip="Horizontal spread, in degrees"), Category = Trace)
+	float Spread;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, meta = (ExposeOnSpawn = true, ToolTip = "Vertical spread, in degrees"), Category = Trace)
+	float VSpread;
+
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, meta = (ExposeOnSpawn = true), Category = Trace)
 	bool bIgnoreBlockingHits;
 
@@ -78,6 +84,8 @@ protected:
 	FTwoVectors GetTraceLine_PlayerController(AActor* InSourceActor, const FCollisionQueryParams& Params) const;
 
 	FCollisionQueryParams CreateCollisionQueryParams(AActor* InSourceActor) const;
+
+	virtual FTwoVectors AdjustTraceForSpread(int32 TraceIndex, const FTwoVectors& TraceLine);
 
 private:
 	TArray<TWeakObjectPtr<class AGameplayAbilityWorldReticle>> ReticleActors;
