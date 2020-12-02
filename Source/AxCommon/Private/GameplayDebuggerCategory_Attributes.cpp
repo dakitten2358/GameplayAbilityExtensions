@@ -26,14 +26,16 @@ void FGameplayDebuggerCategory_Attributes::FRepData::Serialize(FArchive& archive
 
 void FGameplayDebuggerCategory_Attributes::CollectData(APlayerController* OwnerPC, AActor* DebugActor)
 {
-	CollectAttributes(DebugActor);
-	
-
-	TArray<AActor*> OutAttachedActors;
-	DebugActor->GetAttachedActors(OutAttachedActors);
-	for (AActor* AttachedDebugActor : OutAttachedActors)
+	if (DebugActor)
 	{
-		CollectAttributes(AttachedDebugActor);
+		CollectAttributes(DebugActor);
+
+		TArray<AActor*> OutAttachedActors;
+		DebugActor->GetAttachedActors(OutAttachedActors);
+		for (AActor* AttachedDebugActor : OutAttachedActors)
+		{
+			CollectAttributes(AttachedDebugActor);
+		}
 	}
 }
 
