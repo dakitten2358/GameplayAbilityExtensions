@@ -10,7 +10,7 @@ void FAttributeSetInitializer::InitializeAttributes(UAbilitySystemComponent* Abi
 		return;
 
 	TArray<UAttributeSet*> AttributeSets;
-	for (UAttributeSet* Set : AbilitySystemComponent->SpawnedAttributes)
+	for (UAttributeSet* Set : AbilitySystemComponent->GetSpawnedAttributes())
 	{
 		AttributeSets.Add(Set);
 	}

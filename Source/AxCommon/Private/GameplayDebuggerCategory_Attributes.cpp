@@ -42,7 +42,7 @@ void FGameplayDebuggerCategory_Attributes::CollectAttributes(AActor* DebugActor)
 	UAbilitySystemComponent* AbilitySystem = DebugActor ? Cast<UAbilitySystemComponent>(DebugActor->GetComponentByClass(UAbilitySystemComponent::StaticClass())) : nullptr;
 	if (AbilitySystem)
 	{
-		for (UAttributeSet* AttributeSet : AbilitySystem->SpawnedAttributes)
+		for (UAttributeSet* AttributeSet : AbilitySystem->GetSpawnedAttributes())
 		{
 			DataPack.DebugStrings.Add(DebugActor->GetName() + TEXT(".") + AttributeSet->GetName());
 			CollectAttributesFromSet(AttributeSet);
