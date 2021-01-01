@@ -21,11 +21,6 @@ void UAxGameplayAbilitySet::Give(UAbilitySystemComponent* AbilitySystemComponent
 	{
 		int32 inputID = INDEX_NONE;
 		UAxGameplayAbility* AxAbility = Cast<UAxGameplayAbility>(Ability.GetDefaultObject());
-		if (AxAbility)
-		{
-			inputID = static_cast<int32>(AxAbility->GetAbilityInputID());
-		}
-
 		FGameplayAbilitySpecHandle AbilitySpecHandle = AbilitySystemComponent->GiveAbility(FGameplayAbilitySpec(Ability, Level, inputID, SourceObject));
 		OutAbilitySetHandles.AbilityHandles.Add(AbilitySpecHandle);
 	}

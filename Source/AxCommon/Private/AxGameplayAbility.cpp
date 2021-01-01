@@ -4,11 +4,6 @@
 #include "AxCommonDebug.h"
 #include "GameFramework/Actor.h"
 
-int32 UAxGameplayAbility::GetAbilityInputID() const
-{
-	return INDEX_NONE;
-}
-
 void UAxGameplayAbility::OnAvatarSet(const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilitySpec& Spec)
 {
 	Super::OnAvatarSet(ActorInfo, Spec);

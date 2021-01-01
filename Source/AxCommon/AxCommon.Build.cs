@@ -4,6 +4,8 @@ using UnrealBuildTool;
 
 public class AxCommon : ModuleRules
 {
+    protected bool UseEnhancedInput = true;
+
 	public AxCommon(ReadOnlyTargetRules Target) : base(Target)
 	{
 		PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
@@ -30,6 +32,12 @@ public class AxCommon : ModuleRules
         else
         {
             PublicDefinitions.Add("WITH_GAMEPLAY_DEBUGGER=0");
+        }
+
+        if (UseEnhancedInput)
+        {
+            PrivateDefinitions.Add("WITH_ENHANCED_INPUT=1");
+            PublicDependencyModuleNames.Add("EnhancedInput");
         }
     }
 
