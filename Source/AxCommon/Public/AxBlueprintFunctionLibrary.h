@@ -28,4 +28,8 @@ public:
 	/** Native make, to avoid having to deal with quantized vector types */
 	UFUNCTION(BlueprintPure, Category = "Ability|GameplayCue", meta = (NativeMakeFunc, AdvancedDisplay=2, GameplayEffectLevel = "1"))
 	static FGameplayCueParameters MakeGameplayCueParametersFromTargetData(FGameplayEffectContextHandle EffectContextHandle, const FGameplayAbilityTargetDataHandle& TargetDataHandle, int32 GameplayEffectLevel);
+
+
+	UFUNCTION(BlueprintCallable, Category = "Ability|TargetData")
+	static void ClearTargetData(UPARAM(ref) FGameplayAbilityTargetDataHandle& TargetData);
 };

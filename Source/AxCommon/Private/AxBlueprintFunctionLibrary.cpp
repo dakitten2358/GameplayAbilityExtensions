@@ -49,3 +49,8 @@ FGameplayCueParameters UAxBlueprintFunctionLibrary::MakeGameplayCueParametersFro
 	Parameters.GameplayEffectLevel = GameplayEffectLevel;
 	return Parameters;
 }
+
+void UAxBlueprintFunctionLibrary::ClearTargetData(FGameplayAbilityTargetDataHandle& TargetData)
+{
+	TargetData.Clear();
+}
