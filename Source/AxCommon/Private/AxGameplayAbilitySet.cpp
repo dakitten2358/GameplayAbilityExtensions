@@ -61,7 +61,7 @@ void UAxGameplayAbilitySet::Give(AActor* Actor, UObject* SourceObject, int32 Lev
 
 void UAxGameplayAbilitySet::Remove(UAbilitySystemComponent* AbilitySystemComponent, FAxGameplayAbilitySetHandles& AbilitySetHandles) const
 {
-	if (AbilitySystemComponent == nullptr)
+	if (!IsValid(AbilitySystemComponent))
 	{
 		UE_LOG(LogAxCommon, Error, TEXT("Tried to remove AxGameplayAbilitySet from a null AbilitySystemComponent"));
 		return;
