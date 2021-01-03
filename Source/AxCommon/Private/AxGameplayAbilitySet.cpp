@@ -7,6 +7,7 @@
 #include "AbilitySystemGlobals.h"
 #include "AxCommonDebug.h"
 #include "GameFramework/Actor.h"
+#include "GameplayEffect.h"
 
 void UAxGameplayAbilitySet::Give(UAbilitySystemComponent* AbilitySystemComponent, UObject* SourceObject, int32 Level, FAxGameplayAbilitySetHandles& OutAbilitySetHandles) const
 {
@@ -38,7 +39,11 @@ void UAxGameplayAbilitySet::Give(UAbilitySystemComponent* AbilitySystemComponent
 		if (NewHandle.IsValid())
 		{
 			FActiveGameplayEffectHandle ActiveGEHandle = AbilitySystemComponent->ApplyGameplayEffectSpecToTarget(*NewHandle.Data.Get(), AbilitySystemComponent);
-			OutAbilitySetHandles.EffectHandles.Add(ActiveGEHandle);
+
+			// we only keep track of EGameplayEffectDurationType::Infinite effects, we'll assume ::Instant and ::HasDuration
+			// we'll sort themselves out
+			if (GameplayEffect.GetDefaultObject()->DurationPolicy == EGameplayEffectDurationType::Infinite)
+				OutAbilitySetHandles.EffectHandles.Add(ActiveGEHandle);
 		}
 	}
 }
