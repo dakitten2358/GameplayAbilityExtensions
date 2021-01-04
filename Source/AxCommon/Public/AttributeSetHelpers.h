@@ -89,8 +89,8 @@ public:
 	const struct FHitResult* HitResult;
 
 	FPostGameplayEffectExecuteData<CharacterType>(const struct FGameplayEffectModCallbackData& Data)
-		: Source(*Data.EffectSpec.CapturedSourceTags.GetAggregatedTags())
-		, Target(Data.Target)
+		: Target(Data.Target)
+		, Source(*Data.EffectSpec.CapturedSourceTags.GetAggregatedTags())
 		, EffectSpec(Data.EffectSpec)
 		, EvaluatedData(Data.EvaluatedData)
 		, HitResult(nullptr)
