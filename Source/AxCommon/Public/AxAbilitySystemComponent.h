@@ -18,6 +18,12 @@ class AXCOMMON_API UAxAbilitySystemComponent : public UAbilitySystemComponent
 public:
 	void BindAbilityActivationToEnhancedInputComponent(UInputComponent* InputComponent);
 
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Abilities")
+	FGameplayAbilitySpecHandle FindAbilitySpecHandleForClass(TSubclassOf<UGameplayAbility> AbilityClass, UObject* OptionalSourceObject = nullptr);
+
+	UFUNCTION(BlueprintCallable, Category = "Abilities")
+	virtual bool TryActivateAbilityBatched(FGameplayAbilitySpecHandle InAbilityHandle, bool EndAbilityImmediately);
+
 private:
 
 

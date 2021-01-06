@@ -54,3 +54,22 @@ void UAxBlueprintFunctionLibrary::ClearTargetData(FGameplayAbilityTargetDataHand
 {
 	TargetData.Clear();
 }
+
+UAxGameplayAbility* UAxBlueprintFunctionLibrary::GetPrimaryAbilityInstanceFromHandle(UAbilitySystemComponent* AbilitySystemComponent, FGameplayAbilitySpecHandle Handle)
+{
+	if (AbilitySystemComponent)
+	{
+		FGameplayAbilitySpec* AbilitySpec = AbilitySystemComponent->FindAbilitySpecFromHandle(Handle);
+		if (AbilitySpec)
+		{
+			return Cast<UAxGameplayAbility>(AbilitySpec->GetPrimaryInstance());
+		}
+	}
+
+	return nullptr;
+}
+
+bool UAxBlueprintFunctionLibrary::IsAbilitySpecHandleValid(FGameplayAbilitySpecHandle Handle)
+{
+	return Handle.IsValid();
+}

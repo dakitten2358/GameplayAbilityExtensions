@@ -6,7 +6,10 @@
 #include "Abilities/GameplayAbilityTargetTypes.h"
 #include "GameplayEffectTypes.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
+#include "GameplayAbilitySpec.h"
 #include "AxBlueprintFunctionLibrary.generated.h"
+
+class UAxGameplayAbility;
 
 /**
  * 
@@ -25,11 +28,17 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Ability|EffectContext", Meta = (DisplayName = "AddTargetData"))
 	static void EffectContextAddTargetData(FGameplayEffectContextHandle EffectContextHandle, const FGameplayAbilityTargetDataHandle& TargetData);
 
-	/** Native make, to avoid having to deal with quantized vector types */
+	// Clears a Target Data
+	UFUNCTION(BlueprintCallable, Category = "Ability|TargetData")
+	static void ClearTargetData(UPARAM(ref) FGameplayAbilityTargetDataHandle& TargetData);
+
+	// Native make, to avoid having to deal with quantized vector types
 	UFUNCTION(BlueprintPure, Category = "Ability|GameplayCue", meta = (NativeMakeFunc, AdvancedDisplay=2, GameplayEffectLevel = "1"))
 	static FGameplayCueParameters MakeGameplayCueParametersFromTargetData(FGameplayEffectContextHandle EffectContextHandle, const FGameplayAbilityTargetDataHandle& TargetDataHandle, int32 GameplayEffectLevel);
 
+	UFUNCTION(BlueprintCallable, Category = "Ability")
+	static UAxGameplayAbility* GetPrimaryAbilityInstanceFromHandle(UAbilitySystemComponent* AbilitySystemComponent, FGameplayAbilitySpecHandle Handle);
 
-	UFUNCTION(BlueprintCallable, Category = "Ability|TargetData")
-	static void ClearTargetData(UPARAM(ref) FGameplayAbilityTargetDataHandle& TargetData);
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Ability")
+	static bool IsAbilitySpecHandleValid(FGameplayAbilitySpecHandle Handle);
 };

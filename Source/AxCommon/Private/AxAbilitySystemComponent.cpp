@@ -108,3 +108,45 @@ void UAxAbilitySystemComponent::CacheInputActions()
 			CachedInputActions.Add(InputAction);
 	}
 }
+
+FGameplayAbilitySpecHandle UAxAbilitySystemComponent::FindAbilitySpecHandleForClass(TSubclassOf<UGameplayAbility> AbilityClass, UObject* OptionalSourceObject)
+{
+	ABILITYLIST_SCOPE_LOCK();
+	for (FGameplayAbilitySpec& Spec : ActivatableAbilities.Items)
+	{
+		TSubclassOf<UGameplayAbility> SpecAbilityClass = Spec.Ability->GetClass();
+		if (SpecAbilityClass == AbilityClass)
+		{
+			if (!OptionalSourceObject || (OptionalSourceObject && Spec.SourceObject == OptionalSourceObject))
+			{
+				return Spec.Handle;
+			}
+		}
+	}
+
+	return FGameplayAbilitySpecHandle();
+}
+
+bool UAxAbilitySystemComponent::TryActivateAbilityBatched(FGameplayAbilitySpecHandle InAbilityHandle, bool EndAbilityImmediately)
+{
+	bool AbilityActivated = false;
+	if (InAbilityHandle.IsValid())
+	{
+		FScopedServerAbilityRPCBatcher GSAbilityRPCBatcher(this, InAbilityHandle);
+		AbilityActivated = TryActivateAbility(InAbilityHandle, true);
+
+		if (EndAbilityImmediately)
+		{
+			FGameplayAbilitySpec* AbilitySpec = FindAbilitySpecFromHandle(InAbilityHandle);
+			if (AbilitySpec)
+			{
+				UAxGameplayAbility* Ability = Cast<UAxGameplayAbility>(AbilitySpec->GetPrimaryInstance());
+				Ability->ExternalEndAbility();
+			}
+		}
+
+		return AbilityActivated;
+	}
+
+	return AbilityActivated;
+}
