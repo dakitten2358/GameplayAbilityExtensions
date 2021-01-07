@@ -14,11 +14,38 @@ void UAxAbilitySystemComponent::BindAbilityActivationToEnhancedInputComponent(UI
 	{
 		CacheInputActions();
 
+		TArray<uint32>& BoundActions = BoundActionsByComponent.FindOrAdd(EnhancedInputComponent);
 		for (const UInputAction* InputAction : CachedInputActions)
 		{
-			EnhancedInputComponent->BindAction(InputAction, ETriggerEvent::Started, this, &UAxAbilitySystemComponent::OnInputActionStarted, InputAction);
-			EnhancedInputComponent->BindAction(InputAction, ETriggerEvent::Completed, this, &UAxAbilitySystemComponent::OnInputActionEnded, InputAction);
-			EnhancedInputComponent->BindAction(InputAction, ETriggerEvent::Canceled, this, &UAxAbilitySystemComponent::OnInputActionEnded, InputAction);
+			BoundActions.Add(EnhancedInputComponent->BindAction(InputAction, ETriggerEvent::Started, this, &UAxAbilitySystemComponent::OnInputActionStarted, InputAction).GetHandle());
+			BoundActions.Add(EnhancedInputComponent->BindAction(InputAction, ETriggerEvent::Completed, this, &UAxAbilitySystemComponent::OnInputActionEnded, InputAction).GetHandle());
+			BoundActions.Add(EnhancedInputComponent->BindAction(InputAction, ETriggerEvent::Canceled, this, &UAxAbilitySystemComponent::OnInputActionEnded, InputAction).GetHandle());
+		}
+	}
+}
+
+void UAxAbilitySystemComponent::UnbindAbilityActivateFromEnhancedInputComponent(UInputComponent* InputComponent)
+{
+	UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(InputComponent);
+	if (EnhancedInputComponent)
+	{
+		CacheInputActions();
+
+		TArray<uint32>* BoundActionsPtr = BoundActionsByComponent.Find(EnhancedInputComponent);
+		if (BoundActionsPtr)
+		{
+			for (uint32 handle : *BoundActionsPtr)
+			{
+				EnhancedInputComponent->RemoveBindingByHandle(handle);
+			}
+			/*
+			for (const UInputAction* InputAction : CachedInputActions)
+			{
+				EnhancedInputComponent->BindAction(InputAction, ETriggerEvent::Started, this, &UAxAbilitySystemComponent::OnInputActionStarted, InputAction);
+				EnhancedInputComponent->BindAction(InputAction, ETriggerEvent::Completed, this, &UAxAbilitySystemComponent::OnInputActionEnded, InputAction);
+				EnhancedInputComponent->BindAction(InputAction, ETriggerEvent::Canceled, this, &UAxAbilitySystemComponent::OnInputActionEnded, InputAction);
+			}
+			*/
 		}
 	}
 }

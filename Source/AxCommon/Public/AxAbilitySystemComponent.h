@@ -17,6 +17,7 @@ class AXCOMMON_API UAxAbilitySystemComponent : public UAbilitySystemComponent
 	
 public:
 	void BindAbilityActivationToEnhancedInputComponent(UInputComponent* InputComponent);
+	void UnbindAbilityActivateFromEnhancedInputComponent(UInputComponent* InputComponent);
 
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Abilities")
 	FGameplayAbilitySpecHandle FindAbilitySpecHandleForClass(TSubclassOf<UGameplayAbility> AbilityClass, UObject* OptionalSourceObject = nullptr);
@@ -25,8 +26,6 @@ public:
 	virtual bool TryActivateAbilityBatched(FGameplayAbilitySpecHandle InAbilityHandle, bool EndAbilityImmediately);
 
 private:
-
-
 	void OnInputActionStarted(const UInputAction* InputAction);
 	void OnInputActionEnded(const UInputAction* InputAction);
 
@@ -36,4 +35,6 @@ private:
 
 	UPROPERTY()
 	TArray<const class UInputAction*> CachedInputActions;
+
+	TMap<UInputComponent*, TArray<uint32>> BoundActionsByComponent;
 };
