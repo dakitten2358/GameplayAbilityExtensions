@@ -18,7 +18,7 @@ EBTNodeResult::Type UBTTask_AbilitySystemBase::ExecuteTask(UBehaviorTreeComponen
 			UAbilitySystemComponent* AbilitySystemComponent = AbilitySystemInterface->GetAbilitySystemComponent();
 			if (AbilitySystemComponent)
 			{
-				ExecuteTask(OwnerComp, AbilitySystemComponent, NodeMemory);
+				return ExecuteTask(OwnerComp, AbilitySystemComponent, NodeMemory);
 			}
 			else
 			{
