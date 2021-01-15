@@ -1,6 +1,3 @@
-// (C) 2021 Jay Murray
-
-
 #include "AxAbilitySystemComponent.h"
 #include "EnhancedInputComponent.h"
 #include "AxGameplayAbility.h"
@@ -176,4 +173,24 @@ bool UAxAbilitySystemComponent::TryActivateAbilityBatched(FGameplayAbilitySpecHa
 	}
 
 	return AbilityActivated;
+}
+
+void UAxAbilitySystemComponent::K2_AddLooseGameplayTag(const FGameplayTag& GameplayTag, int32 Count)
+{
+	AddLooseGameplayTag(GameplayTag, Count);
+}
+
+void UAxAbilitySystemComponent::K2_AddLooseGameplayTags(const FGameplayTagContainer& GameplayTags, int32 Count)
+{
+	AddLooseGameplayTags(GameplayTags, Count);
+}
+
+void UAxAbilitySystemComponent::K2_RemoveLooseGameplayTag(const FGameplayTag& GameplayTag, int32 Count)
+{
+	RemoveLooseGameplayTag(GameplayTag, Count);
+}
+
+void UAxAbilitySystemComponent::K2_RemoveLooseGameplayTags(const FGameplayTagContainer& GameplayTags, int32 Count)
+{
+	RemoveLooseGameplayTags(GameplayTags, Count);
 }
