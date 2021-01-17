@@ -17,6 +17,7 @@ protected:
 	struct FBTActivateAbilityAndWaitEventMemory
 	{
 		FDelegateHandle GameplayEventDelegateHandle;
+		class UAbilitySystemComponent* AbilitySystemComponent;
 		bool Completed;
 	};
 
@@ -32,6 +33,7 @@ public:
 
 protected:
 	EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, UAbilitySystemComponent* AbilitySystemComp, uint8* NodeMemory) override;
+	EBTNodeResult::Type AbortTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
 	virtual void TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds) override;
 
 	void OnGameplayTagEvent(FGameplayTag GameplayTag, const FGameplayEventData* EventData, FBTActivateAbilityAndWaitEventMemory* Instance);
