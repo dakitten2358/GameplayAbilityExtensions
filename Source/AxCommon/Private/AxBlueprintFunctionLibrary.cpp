@@ -69,6 +69,20 @@ UAxGameplayAbility* UAxBlueprintFunctionLibrary::GetPrimaryAbilityInstanceFromHa
 	return nullptr;
 }
 
+UAxGameplayAbility* UAxBlueprintFunctionLibrary::GetPrimaryAbilityInstanceFromClass(UAbilitySystemComponent* AbilitySystemComponent, TSubclassOf<UGameplayAbility> InAbilityClass)
+{
+	if (AbilitySystemComponent)
+	{
+		FGameplayAbilitySpec* AbilitySpec = AbilitySystemComponent->FindAbilitySpecFromClass(InAbilityClass);
+		if (AbilitySpec)
+		{
+			return Cast<UAxGameplayAbility>(AbilitySpec->GetPrimaryInstance());
+		}
+	}
+
+	return nullptr;
+}
+
 bool UAxBlueprintFunctionLibrary::IsAbilitySpecHandleValid(FGameplayAbilitySpecHandle Handle)
 {
 	return Handle.IsValid();

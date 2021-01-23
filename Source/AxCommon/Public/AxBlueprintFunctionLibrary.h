@@ -39,6 +39,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Ability")
 	static UAxGameplayAbility* GetPrimaryAbilityInstanceFromHandle(UAbilitySystemComponent* AbilitySystemComponent, FGameplayAbilitySpecHandle Handle);
 
+	UFUNCTION(BlueprintCallable, Category = "Ability")
+	static UAxGameplayAbility* GetPrimaryAbilityInstanceFromClass(UAbilitySystemComponent* AbilitySystemComponent, TSubclassOf<UGameplayAbility> InAbilityClass);
+
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Ability")
 	static bool IsAbilitySpecHandleValid(FGameplayAbilitySpecHandle Handle);
 };
