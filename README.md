@@ -2,6 +2,8 @@
 
 *Fair Warning:  This is a C++ plugin for UE4*
 
+**Depends on EnhancedInput plugin**
+
 Helpers for working with the GameplayAbilities plugin
 
 ## Helpers (in no particular order)
