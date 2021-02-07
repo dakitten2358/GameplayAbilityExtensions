@@ -57,5 +57,5 @@ public:
 
 	// Applies container spec that was made from an ability
 	UFUNCTION(BlueprintCallable, Category = "Ability|Container")
-	static TArray<FActiveGameplayEffectHandle> ApplyExternalEffectContainerSpec(const FAxGameplayEffectContainerSpec& ContainerSpec);
+	static TArray<FActiveGameplayEffectHandle> ApplyExternalEffectContainerSpec(const FAxGameplayEffectContainerSpec& ContainerSpec, AActor* ExternalInstigator = nullptr, AActor* ExternalEffectCauser = nullptr);
 };

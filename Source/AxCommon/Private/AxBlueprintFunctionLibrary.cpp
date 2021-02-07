@@ -104,7 +104,7 @@ void UAxBlueprintFunctionLibrary::AddTargetHitResultToEffectContainerSpec(FAxGam
 	ContainerSpec.AddTargetHitResult(HitResult);
 }
 
-TArray<FActiveGameplayEffectHandle> UAxBlueprintFunctionLibrary::ApplyExternalEffectContainerSpec(const FAxGameplayEffectContainerSpec& ContainerSpec)
+TArray<FActiveGameplayEffectHandle> UAxBlueprintFunctionLibrary::ApplyExternalEffectContainerSpec(const FAxGameplayEffectContainerSpec& ContainerSpec, AActor* ExternalInstigator, AActor* ExternalEffectCauser)
 {
 	TArray<FActiveGameplayEffectHandle> AllEffects;
 
@@ -116,7 +116,14 @@ TArray<FActiveGameplayEffectHandle> UAxBlueprintFunctionLibrary::ApplyExternalEf
 			// If effect is valid, iterate list of targets and apply to all
 			for (TSharedPtr<FGameplayAbilityTargetData> Data : ContainerSpec.TargetData.Data)
 			{
-				AllEffects.Append(Data->ApplyGameplayEffectSpec(*SpecHandle.Data.Get()));
+				FGameplayEffectSpec* EffectSpec = SpecHandle.Data.Get();
+				FGameplayEffectContextHandle EffectContextHandle = EffectSpec->GetEffectContext();
+				FGameplayEffectContext* EffectContext = EffectContextHandle.Get();
+				if (ExternalInstigator || ExternalEffectCauser)
+				{
+					EffectContext->AddInstigator(ExternalInstigator, ExternalEffectCauser);
+				}
+				AllEffects.Append(Data->ApplyGameplayEffectSpec(*EffectSpec));
 			}
 		}
 	}
