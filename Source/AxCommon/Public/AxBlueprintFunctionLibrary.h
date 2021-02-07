@@ -7,6 +7,7 @@
 #include "GameplayEffectTypes.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "GameplayAbilitySpec.h"
+#include "AxGameplayEffectContainer.h"
 #include "AxBlueprintFunctionLibrary.generated.h"
 
 class UAxGameplayAbility;
@@ -44,4 +45,17 @@ public:
 
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Ability")
 	static bool IsAbilitySpecHandleValid(FGameplayAbilitySpecHandle Handle);
+
+	UFUNCTION(BlueprintCallable, Category = "Ability|Container", Meta = (AutoCreateRefTerm = "TargetData, HitResults, TargetActors"))
+	static void AddTargetsToEffectContainerSpec(UPARAM(ref) FAxGameplayEffectContainerSpec& ContainerSpec, const TArray<FGameplayAbilityTargetDataHandle>& TargetData, const TArray<FHitResult>& HitResults, const TArray<AActor*>& TargetActors);
+
+	UFUNCTION(BlueprintCallable, Category = "Ability|Container")
+	static void AddTargetActorToEffectContainerSpec(UPARAM(ref) FAxGameplayEffectContainerSpec& ContainerSpec, AActor* TargetActor);
+
+	UFUNCTION(BlueprintCallable, Category = "Ability|Container")
+	static void AddTargetHitResultToEffectContainerSpec(UPARAM(ref) FAxGameplayEffectContainerSpec& ContainerSpec, const FHitResult& HitResult);
+
+	// Applies container spec that was made from an ability
+	UFUNCTION(BlueprintCallable, Category = "Ability|Container")
+	static TArray<FActiveGameplayEffectHandle> ApplyExternalEffectContainerSpec(const FAxGameplayEffectContainerSpec& ContainerSpec);
 };

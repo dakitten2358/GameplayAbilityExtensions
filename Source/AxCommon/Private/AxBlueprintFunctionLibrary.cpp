@@ -1,5 +1,6 @@
 #include "AxBlueprintFunctionLibrary.h"
 #include "AxGameplayEffectContext.h"
+#include "AxGameplayEffectContainer.h"
 
 FGameplayAbilityTargetDataHandle UAxBlueprintFunctionLibrary::EffectContextGetTargetData(FGameplayEffectContextHandle EffectContextHandle)
 {
@@ -86,4 +87,38 @@ UAxGameplayAbility* UAxBlueprintFunctionLibrary::GetPrimaryAbilityInstanceFromCl
 bool UAxBlueprintFunctionLibrary::IsAbilitySpecHandleValid(FGameplayAbilitySpecHandle Handle)
 {
 	return Handle.IsValid();
+}
+
+void UAxBlueprintFunctionLibrary::AddTargetsToEffectContainerSpec(FAxGameplayEffectContainerSpec& ContainerSpec, const TArray<FGameplayAbilityTargetDataHandle>& TargetData, const TArray<FHitResult>& HitResults, const TArray<AActor*>& TargetActors)
+{
+	ContainerSpec.AddTargets(TargetData, HitResults, TargetActors);
+}
+
+void UAxBlueprintFunctionLibrary::AddTargetActorToEffectContainerSpec(FAxGameplayEffectContainerSpec& ContainerSpec, AActor* TargetActor)
+{
+	ContainerSpec.AddTargetActor(TargetActor);
+}
+
+void UAxBlueprintFunctionLibrary::AddTargetHitResultToEffectContainerSpec(FAxGameplayEffectContainerSpec& ContainerSpec, const FHitResult& HitResult)
+{
+	ContainerSpec.AddTargetHitResult(HitResult);
+}
+
+TArray<FActiveGameplayEffectHandle> UAxBlueprintFunctionLibrary::ApplyExternalEffectContainerSpec(const FAxGameplayEffectContainerSpec& ContainerSpec)
+{
+	TArray<FActiveGameplayEffectHandle> AllEffects;
+
+	// Iterate list of gameplay effects
+	for (const FGameplayEffectSpecHandle& SpecHandle : ContainerSpec.TargetGameplayEffectSpecs)
+	{
+		if (SpecHandle.IsValid())
+		{
+			// If effect is valid, iterate list of targets and apply to all
+			for (TSharedPtr<FGameplayAbilityTargetData> Data : ContainerSpec.TargetData.Data)
+			{
+				AllEffects.Append(Data->ApplyGameplayEffectSpec(*SpecHandle.Data.Get()));
+			}
+		}
+	}
+	return AllEffects;
 }

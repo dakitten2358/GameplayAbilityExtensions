@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Abilities/GameplayAbility.h"
 #include "InputAction.h"
+#include "AxGameplayEffectContainer.h" 
 #include "AxGameplayAbility.generated.h"
 
 /**
@@ -34,4 +35,20 @@ public:
 
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "Input")
 	const UInputAction* AbilityInputAction;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Effects")
+	TMap<FGameplayTag, FAxGameplayEffectContainer> EffectContainerMap;
+
+protected:
+	// Make gameplay effect container spec to be applied later, using the passed in container
+	UFUNCTION(BlueprintCallable, Category = Ability, meta = (AutoCreateRefTerm = "EventData"))
+	virtual FAxGameplayEffectContainerSpec MakeEffectContainerSpecFromContainer(const FAxGameplayEffectContainer& Container, const FGameplayEventData& EventData, int32 OverrideGameplayLevel = -1);
+
+	// Search for and make a gameplay effect container spec to be applied later, from the EffectContainerMap
+	UFUNCTION(BlueprintCallable, Category = Ability, meta = (AutoCreateRefTerm = "EventData"))
+	virtual FAxGameplayEffectContainerSpec MakeEffectContainerSpec(FGameplayTag ContainerTag, const FGameplayEventData& EventData, int32 OverrideGameplayLevel = -1);
+
+	// Applies a gameplay effect container spec that was previously created
+	UFUNCTION(BlueprintCallable, Category = "Ability")
+	virtual TArray<FActiveGameplayEffectHandle> ApplyEffectContainerSpec(const FAxGameplayEffectContainerSpec& ContainerSpec);
 };
