@@ -51,4 +51,7 @@ protected:
 	// Applies a gameplay effect container spec that was previously created
 	UFUNCTION(BlueprintCallable, Category = "Ability")
 	virtual TArray<FActiveGameplayEffectHandle> ApplyEffectContainerSpec(const FAxGameplayEffectContainerSpec& ContainerSpec);
+
+	UFUNCTION(BlueprintCallable, Category = "Target")
+	virtual FGameplayAbilityTargetDataHandle MakeTargetDataFromActor(AActor* TargetActor);
 };

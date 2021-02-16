@@ -98,3 +98,22 @@ TArray<FActiveGameplayEffectHandle> UAxGameplayAbility::ApplyEffectContainerSpec
 	}
 	return AllEffects;
 }
+
+
+FGameplayAbilityTargetDataHandle UAxGameplayAbility::MakeTargetDataFromActor(AActor* TargetActor)
+{
+	TArray<TWeakObjectPtr<AActor>> TargetActors;
+	TargetActors.Add(TargetActor);
+
+	FGameplayAbilityTargetingLocationInfo targetingLocationInfo;
+	FGameplayAbilityTargetDataHandle TargetDataHandle = targetingLocationInfo.MakeTargetDataHandleFromActors(TargetActors);
+
+	UAbilitySystemComponent* OwningASC = GetAbilitySystemComponentFromActorInfo();
+	if (OwningASC)	
+	{
+		FGameplayTag ApplicationTag;
+		OwningASC->ServerSetReplicatedTargetData(GetCurrentAbilitySpecHandle(), GetCurrentActivationInfo().GetActivationPredictionKey(), TargetDataHandle, ApplicationTag, OwningASC->ScopedPredictionKey);
+	}
+
+	return TargetDataHandle;
+}
