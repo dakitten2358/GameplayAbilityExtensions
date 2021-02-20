@@ -43,6 +43,7 @@ public:
 
 private:
 	void OnInputActionStarted(const UInputAction* InputAction);
+	void OnInputActionTriggered(const UInputAction* InputAction);
 	void OnInputActionEnded(const UInputAction* InputAction);
 
 	void CacheInputActions();

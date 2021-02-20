@@ -14,7 +14,9 @@ void UAxAbilitySystemComponent::BindAbilityActivationToEnhancedInputComponent(UI
 		TArray<uint32>& BoundActions = BoundActionsByComponent.FindOrAdd(EnhancedInputComponent);
 		for (const UInputAction* InputAction : CachedInputActions)
 		{
-			BoundActions.Add(EnhancedInputComponent->BindAction(InputAction, ETriggerEvent::Started, this, &UAxAbilitySystemComponent::OnInputActionStarted, InputAction).GetHandle());
+			// probably don't need Started since Triggered will get called
+			//BoundActions.Add(EnhancedInputComponent->BindAction(InputAction, ETriggerEvent::Started, this, &UAxAbilitySystemComponent::OnInputActionStarted, InputAction).GetHandle());
+			BoundActions.Add(EnhancedInputComponent->BindAction(InputAction, ETriggerEvent::Triggered, this, &UAxAbilitySystemComponent::OnInputActionTriggered, InputAction).GetHandle());
 			BoundActions.Add(EnhancedInputComponent->BindAction(InputAction, ETriggerEvent::Completed, this, &UAxAbilitySystemComponent::OnInputActionEnded, InputAction).GetHandle());
 			BoundActions.Add(EnhancedInputComponent->BindAction(InputAction, ETriggerEvent::Canceled, this, &UAxAbilitySystemComponent::OnInputActionEnded, InputAction).GetHandle());
 		}
@@ -35,14 +37,6 @@ void UAxAbilitySystemComponent::UnbindAbilityActivateFromEnhancedInputComponent(
 			{
 				EnhancedInputComponent->RemoveBindingByHandle(handle);
 			}
-			/*
-			for (const UInputAction* InputAction : CachedInputActions)
-			{
-				EnhancedInputComponent->BindAction(InputAction, ETriggerEvent::Started, this, &UAxAbilitySystemComponent::OnInputActionStarted, InputAction);
-				EnhancedInputComponent->BindAction(InputAction, ETriggerEvent::Completed, this, &UAxAbilitySystemComponent::OnInputActionEnded, InputAction);
-				EnhancedInputComponent->BindAction(InputAction, ETriggerEvent::Canceled, this, &UAxAbilitySystemComponent::OnInputActionEnded, InputAction);
-			}
-			*/
 		}
 	}
 }
@@ -57,9 +51,11 @@ void UAxAbilitySystemComponent::OnInputActionStarted(const UInputAction* InputAc
 			UAxGameplayAbility* AxGameplayAbility = Cast<UAxGameplayAbility>(Spec.Ability);
 			if (AxGameplayAbility && AxGameplayAbility->AbilityInputAction == InputAction)
 			{
+				UE_LOG(LogAxCommon, Warning, TEXT("found matching gameplay ability"));
 				Spec.InputPressed = true;
 				if (Spec.IsActive())
 				{
+					UE_LOG(LogAxCommon, Warning, TEXT("already active"));
 					if (Spec.Ability->bReplicateInputDirectly && IsOwnerActorAuthoritative() == false)
 					{
 						ServerSetInputPressed(Spec.Handle);
@@ -72,12 +68,19 @@ void UAxAbilitySystemComponent::OnInputActionStarted(const UInputAction* InputAc
 				}
 				else if (AxGameplayAbility->bActivateAbilityOnInputAction)
 				{
+					UE_LOG(LogAxCommon, Warning, TEXT("trying to activate"));
 					// Ability is not active, so try to activate it
 					TryActivateAbility(Spec.Handle);
 				}
 			}
 		}
 	}
+}
+
+void UAxAbilitySystemComponent::OnInputActionTriggered(const UInputAction* InputAction)
+{
+	// for now, this does the same thing as started
+	OnInputActionStarted(InputAction);
 }
 
 void UAxAbilitySystemComponent::OnInputActionEnded(const UInputAction* InputAction)
