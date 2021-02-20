@@ -51,11 +51,9 @@ void UAxAbilitySystemComponent::OnInputActionStarted(const UInputAction* InputAc
 			UAxGameplayAbility* AxGameplayAbility = Cast<UAxGameplayAbility>(Spec.Ability);
 			if (AxGameplayAbility && AxGameplayAbility->AbilityInputAction == InputAction)
 			{
-				UE_LOG(LogAxCommon, Warning, TEXT("found matching gameplay ability"));
 				Spec.InputPressed = true;
 				if (Spec.IsActive())
 				{
-					UE_LOG(LogAxCommon, Warning, TEXT("already active"));
 					if (Spec.Ability->bReplicateInputDirectly && IsOwnerActorAuthoritative() == false)
 					{
 						ServerSetInputPressed(Spec.Handle);
@@ -68,7 +66,6 @@ void UAxAbilitySystemComponent::OnInputActionStarted(const UInputAction* InputAc
 				}
 				else if (AxGameplayAbility->bActivateAbilityOnInputAction)
 				{
-					UE_LOG(LogAxCommon, Warning, TEXT("trying to activate"));
 					// Ability is not active, so try to activate it
 					TryActivateAbility(Spec.Handle);
 				}
