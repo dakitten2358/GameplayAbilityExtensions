@@ -17,27 +17,37 @@ void UAxGameplayAbilitySet::Give(UAbilitySystemComponent* AbilitySystemComponent
 		return;
 	}
 
-	for (const TSubclassOf<UGameplayAbility>& Ability : Abilities)
+	for (const TSubclassOf<UGameplayAbility>& AbilityClass : Abilities)
 	{
+		if (!AbilityClass)
+		{
+			UE_LOG(LogAxCommon, Error, TEXT("Tried to give a null ability while granting abilities to %s"), *AActor::GetDebugName(AbilitySystemComponent->GetOwner()));
+			continue;
+		}
 		int32 inputID = INDEX_NONE;
-		UAxGameplayAbility* AxAbility = Cast<UAxGameplayAbility>(Ability.GetDefaultObject());
-		FGameplayAbilitySpecHandle AbilitySpecHandle = AbilitySystemComponent->GiveAbility(FGameplayAbilitySpec(Ability, Level, inputID, SourceObject));
+		FGameplayAbilitySpecHandle AbilitySpecHandle = AbilitySystemComponent->GiveAbility(FGameplayAbilitySpec(AbilityClass, Level, inputID, SourceObject));
 		OutAbilitySetHandles.AbilityHandles.Add(AbilitySpecHandle);
 	}
 
-	for (const TSubclassOf<UGameplayEffect>& GameplayEffect : Effects)
+	for (const TSubclassOf<UGameplayEffect>& GameplayEffectClass : Effects)
 	{
+		if (!GameplayEffectClass)
+		{
+			UE_LOG(LogAxCommon, Error, TEXT("Tried to give a null ability while granting abilities to %s"), *AActor::GetDebugName(AbilitySystemComponent->GetOwner()));
+			continue;
+		}
+
 		FGameplayEffectContextHandle EffectContext = AbilitySystemComponent->MakeEffectContext();
 		if (SourceObject) EffectContext.AddSourceObject(SourceObject);
 
-		FGameplayEffectSpecHandle NewHandle = AbilitySystemComponent->MakeOutgoingSpec(GameplayEffect, Level, EffectContext);
+		FGameplayEffectSpecHandle NewHandle = AbilitySystemComponent->MakeOutgoingSpec(GameplayEffectClass, Level, EffectContext);
 		if (NewHandle.IsValid())
 		{
 			FActiveGameplayEffectHandle ActiveGEHandle = AbilitySystemComponent->ApplyGameplayEffectSpecToTarget(*NewHandle.Data.Get(), AbilitySystemComponent);
 
 			// we only keep track of EGameplayEffectDurationType::Infinite effects, we'll assume ::Instant and ::HasDuration
 			// we'll sort themselves out
-			if (GameplayEffect.GetDefaultObject()->DurationPolicy == EGameplayEffectDurationType::Infinite)
+			if (GameplayEffectClass.GetDefaultObject()->DurationPolicy == EGameplayEffectDurationType::Infinite)
 				OutAbilitySetHandles.EffectHandles.Add(ActiveGEHandle);
 		}
 	}
