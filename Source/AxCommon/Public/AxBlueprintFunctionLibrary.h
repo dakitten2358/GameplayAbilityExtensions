@@ -8,6 +8,7 @@
 #include "Kismet/BlueprintFunctionLibrary.h"
 #include "GameplayAbilitySpec.h"
 #include "AxGameplayEffectContainer.h"
+#include "AxGameplayTargetDataFilter.h"
 #include "AxBlueprintFunctionLibrary.generated.h"
 
 class UAxGameplayAbility;
@@ -58,4 +59,12 @@ public:
 	// Applies container spec that was made from an ability
 	UFUNCTION(BlueprintCallable, Category = "Ability|Container")
 	static TArray<FActiveGameplayEffectHandle> ApplyExternalEffectContainerSpec(const FAxGameplayEffectContainerSpec& ContainerSpec, AActor* ExternalInstigator = nullptr, AActor* ExternalEffectCauser = nullptr);
+
+	/** Create a handle for filtering target data, filling out all fields */
+	UFUNCTION(BlueprintCallable, Category = "Filter")
+	static FGameplayTargetDataFilterHandle MakeAxFilterHandle(FAxGameplayTargetDataFilter Filter, AActor* FilterActor);
+
+	UFUNCTION(BlueprintCallable, Category="Rendering|Debug", meta=(WorldContext="WorldContextObject", DevelopmentOnly))
+	static void DrawDebugHitResult(const UObject* WorldContextObject, const FHitResult& HitResult);
+
 };

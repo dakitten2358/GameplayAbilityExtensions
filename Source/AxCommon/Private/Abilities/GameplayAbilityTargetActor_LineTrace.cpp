@@ -116,7 +116,20 @@ TArray<FHitResult> AGameplayAbilityTargetActor_LineTrace::PerformTrace(AActor* I
 	bool bTraceComplex = false;
 	TArray<AActor*> ActorsToIgnore;
 
+	// maybe we don't need this?
 	ActorsToIgnore.Add(InSourceActor);
+
+	// explicitly ignore filtered out actor, added this to deal
+	// ricochet bullets starting from an actor, that we want to
+	// filter out
+	auto FilterPtr = Filter.Filter;
+	if (FilterPtr.IsValid())
+	{
+		if (FilterPtr->SelfFilter.GetValue() == ETargetDataFilterSelf::Type::TDFS_NoSelf && FilterPtr->SelfActor && !FilterPtr->bReverseFilter)
+		{
+			ActorsToIgnore.Add(FilterPtr->SelfActor);
+		}
+	}
 
 	FCollisionQueryParams Params(SCENE_QUERY_STAT(AGameplayAbilityTargetActor_LineTrace), bTraceComplex);
 	Params.bReturnPhysicalMaterial = true;
@@ -188,17 +201,17 @@ bool AGameplayAbilityTargetActor_LineTrace::LineTraceWithFilter(TArray<FHitResul
 	check(World);
 
 	TArray<FHitResult> HitResults;
-	bool bAnyHits = World->LineTraceMultiByProfile(HitResults, Start, End, ProfileName, Params);
+	bool bAnyBlockingHits = World->LineTraceMultiByProfile(HitResults, Start, End, ProfileName, Params);
 
 	TArray<FHitResult> FilteredHitResults;
-	if (bAnyHits)
+	if (HitResults.Num() > 0)
 	{
 		// Start param could be player ViewPoint. We want HitResult to always display the StartLocation.
 		FVector TraceStart = StartLocation.GetTargetingTransform().GetLocation();
 		for (int32 HitIdx = 0; HitIdx < HitResults.Num(); ++HitIdx)
 		{
 			FHitResult& Hit = HitResults[HitIdx];
-			if (!Hit.Actor.IsValid() || FilterHandle.FilterPassesForActor(Hit.Actor))
+			if (!Hit.Actor.IsValid() || FilterHandle.FilterPassesForActor(Hit.Actor) && !IsAlreadyInHitResults(FilteredHitResults, Hit.Actor))
 			{
 				Hit.TraceStart = TraceStart;
 				Hit.TraceEnd = End;
@@ -209,13 +222,24 @@ bool AGameplayAbilityTargetActor_LineTrace::LineTraceWithFilter(TArray<FHitResul
 	}
 
 	OutHitResults = FilteredHitResults;
-	return bAnyHits;
+	return FilteredHitResults.Num() > 0;
+}
+
+bool AGameplayAbilityTargetActor_LineTrace::IsAlreadyInHitResults(const TArray<FHitResult>& HitResults, TWeakObjectPtr<AActor> ActorToCheckPtr) const
+{
+	const AActor* ActorToCheck = ActorToCheckPtr.Get();
+	for(const auto& HitResult : HitResults)
+		if (HitResult.Actor == ActorToCheck)
+			return true;
+	return false;
 }
 
 FTwoVectors AGameplayAbilityTargetActor_LineTrace::GetTraceLine(AActor* InSourceActor, const FCollisionQueryParams& Params) const
 {
 	switch (AimDirection)
 	{
+	case EAimDirection::StartLocation:
+		return GetTraceLine_StartLocation();
 	case EAimDirection::AvatarActor:
 		return GetTraceLine_AvatarActor();
 	case EAimDirection::PlayerController:
@@ -281,6 +305,18 @@ FTwoVectors AGameplayAbilityTargetActor_LineTrace::GetTraceLine_PlayerController
 	}
 
 	const FVector End = Start + (AdjustedAimDir * MaxRange);
+	return FTwoVectors(Start, End);
+}
+
+FTwoVectors AGameplayAbilityTargetActor_LineTrace::GetTraceLine_StartLocation() const
+{
+	FVector Start = StartLocation.GetTargetingTransform().GetLocation();
+
+	FRotator StartRotator = StartLocation.GetTargetingTransform().GetRotation().Rotator();
+	const FVector StartDirection = StartRotator.Vector();
+
+	FVector End = Start + (StartDirection * MaxRange);
+	
 	return FTwoVectors(Start, End);
 }
 

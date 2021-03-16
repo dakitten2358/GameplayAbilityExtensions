@@ -1,6 +1,7 @@
 #include "AxBlueprintFunctionLibrary.h"
 #include "AxGameplayEffectContext.h"
 #include "AxGameplayEffectContainer.h"
+#include "AxCommonDebug.h"
 
 FGameplayAbilityTargetDataHandle UAxBlueprintFunctionLibrary::EffectContextGetTargetData(FGameplayEffectContextHandle EffectContextHandle)
 {
@@ -128,4 +129,40 @@ TArray<FActiveGameplayEffectHandle> UAxBlueprintFunctionLibrary::ApplyExternalEf
 		}
 	}
 	return AllEffects;
+}
+
+FGameplayTargetDataFilterHandle UAxBlueprintFunctionLibrary::MakeAxFilterHandle(FAxGameplayTargetDataFilter Filter, AActor* FilterActor)
+{
+	FGameplayTargetDataFilterHandle FilterHandle;
+	FAxGameplayTargetDataFilter* NewFilter = new FAxGameplayTargetDataFilter(Filter);
+	NewFilter->InitializeFilterContext(FilterActor);
+	FilterHandle.Filter = TSharedPtr<FGameplayTargetDataFilter>(NewFilter);
+	return FilterHandle;
+}
+
+void UAxBlueprintFunctionLibrary::DrawDebugHitResult(const UObject* WorldContextObject, const FHitResult& HitResult)
+{
+#if ENABLE_DRAW_DEBUG
+	if (UWorld* World = GEngine->GetWorldFromContextObject(WorldContextObject, EGetWorldErrorMode::LogAndReturnNull))
+	{
+		FVector LineStart = HitResult.TraceStart;
+		FVector LineEnd = HitResult.Location;
+
+		FColor TraceColor = FColor::Red;
+		bool bPersistent = false;
+		float LifeTime = 0.5f;
+		float Thickness = 2.0f;
+
+		::DrawDebugLine(World, LineStart, LineEnd, TraceColor, bPersistent, LifeTime, SDPG_World, Thickness);
+
+		FVector TraceDirection = (LineEnd - LineStart).GetSafeNormal();
+		FVector ReflectionDirection = FMath::GetReflectionVector(TraceDirection, HitResult.Normal);
+		FVector ScaledReflectionDirection = ReflectionDirection * 100.0f;
+		FVector ReflectionEnd = (LineEnd + ScaledReflectionDirection);
+
+		FColor ReflectionColor = FColor::Green;
+
+		::DrawDebugLine(World, LineEnd, ReflectionEnd, ReflectionColor, bPersistent, LifeTime, SDPG_World, Thickness);
+	}
+#endif
 }

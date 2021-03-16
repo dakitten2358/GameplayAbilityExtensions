@@ -18,6 +18,7 @@ enum class EAimDirection : uint8
 {
 	AvatarActor UMETA(DisplayName = "Avatar Direction", ToolTip="From start location in the direction the avatar is facing"),
 	PlayerController UMETA(DisplayName = "Look Direction", ToolTip="From start location, in the direction the camera is facing, involves an additional trace"),
+	StartLocation UMETA(DisplayName = "Start Location", ToolTip="Use the rotation from StartLocation as the direction of the trace"),
 };
 
 UCLASS()
@@ -82,6 +83,7 @@ protected:
 	FTwoVectors GetTraceLine(AActor* InSourceActor, const FCollisionQueryParams& Params) const;
 	FTwoVectors GetTraceLine_AvatarActor() const;
 	FTwoVectors GetTraceLine_PlayerController(AActor* InSourceActor, const FCollisionQueryParams& Params) const;
+	FTwoVectors GetTraceLine_StartLocation() const;
 
 	FCollisionQueryParams CreateCollisionQueryParams(AActor* InSourceActor) const;
 
@@ -93,6 +95,7 @@ private:
 	void DestroyReticleActors();
 	void UpdateReticleActorsFromHitResults(int32 TraceIndex, const TArray<FHitResult>& TraceHitResults);
 	void UpdateReticleActorFromHitResult(int32 ReticleIndex, const FHitResult& HitResult);
+	bool IsAlreadyInHitResults(const TArray<FHitResult>& HitResults, TWeakObjectPtr<AActor> ActorToCheckPtr) const;
 
 #if ENABLE_DRAW_DEBUG
 	void ShowDebugTrace(AActor* InSourceActor, const TArray<FHitResult>& HitResults, EDrawDebugTrace::Type DrawDebugType, float Duration = -1.0f) const;

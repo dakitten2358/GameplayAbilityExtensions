@@ -1,34 +1,43 @@
 {
-  "FileVersion": 3,
-  "Version": 1,
-  "VersionName": "0.1",
-  "FriendlyName": "Ability Extensions - Common",
-  "Description": "Adds helpers for interacting with GameplayEffect and GameplayAbility classes",
-  "Category": "Gameplay",
-  "CreatedBy": "Jay Murray",
-  "CreatedByURL": "",
-  "DocsURL": "",
-  "MarketplaceURL": "",
-  "SupportURL": "",
-  "CanContainContent": true,
-  "IsBetaVersion": true,
-  "IsExperimentalVersion": false,
-  "Installed": false,
-  "Modules": [
-    {
-      "Name": "AxCommon",
-      "Type": "Runtime",
-      "LoadingPhase": "PreDefault"
-    }
-  ],
-  "Plugins": [
-    {
-      "Name": "GameplayAbilities",
-      "Enabled": true
-    },
-    {
-      "Name": "EnhancedInput",
-      "Enabled":  true
-    }
-  ]
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "0.1",
+	"FriendlyName": "Ability Extensions - Common",
+	"Description": "Adds helpers for interacting with GameplayEffect and GameplayAbility classes",
+	"Category": "Gameplay",
+	"CreatedBy": "Jay Murray",
+	"CreatedByURL": "",
+	"DocsURL": "",
+	"MarketplaceURL": "",
+	"SupportURL": "",
+	"CanContainContent": true,
+	"IsBetaVersion": true,
+	"IsExperimentalVersion": false,
+	"Installed": false,
+	"Modules": [
+		{
+			"Name": "AxCommon",
+			"Type": "Runtime",
+			"LoadingPhase": "PreDefault"
+		},
+		{
+			"Name": "AxWeapons",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		}
+	],
+	"Plugins": [
+		{
+			"Name": "GameplayAbilities",
+			"Enabled": true
+		},
+		{
+			"Name": "EnhancedInput",
+			"Enabled": true
+		},
+		{
+			"Name": "Niagara",
+			"Enabled": true
+		}
+	]
 }
