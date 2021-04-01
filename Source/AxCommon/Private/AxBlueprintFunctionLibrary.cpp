@@ -2,6 +2,7 @@
 #include "AxGameplayEffectContext.h"
 #include "AxGameplayEffectContainer.h"
 #include "AxCommonDebug.h"
+#include "AbilitySystemBlueprintLibrary.h"
 
 FGameplayAbilityTargetDataHandle UAxBlueprintFunctionLibrary::EffectContextGetTargetData(FGameplayEffectContextHandle EffectContextHandle)
 {
@@ -129,6 +130,18 @@ TArray<FActiveGameplayEffectHandle> UAxBlueprintFunctionLibrary::ApplyExternalEf
 		}
 	}
 	return AllEffects;
+}
+
+void UAxBlueprintFunctionLibrary::AssignTagSetByCallerMagnitudeContainerSpec(FAxGameplayEffectContainerSpec& ContainerSpec, FGameplayTag DataTag, float Magnitude)
+{
+	// Iterate list of gameplay effects
+	for (FGameplayEffectSpecHandle SpecHandle : ContainerSpec.TargetGameplayEffectSpecs)
+	{
+		if (SpecHandle.IsValid())
+		{
+			UAbilitySystemBlueprintLibrary::AssignTagSetByCallerMagnitude(SpecHandle, DataTag, Magnitude);
+		}
+	}
 }
 
 FGameplayTargetDataFilterHandle UAxBlueprintFunctionLibrary::MakeAxFilterHandle(FAxGameplayTargetDataFilter Filter, AActor* FilterActor)

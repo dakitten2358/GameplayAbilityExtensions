@@ -60,6 +60,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Ability|Container")
 	static TArray<FActiveGameplayEffectHandle> ApplyExternalEffectContainerSpec(const FAxGameplayEffectContainerSpec& ContainerSpec, AActor* ExternalInstigator = nullptr, AActor* ExternalEffectCauser = nullptr);
 
+	UFUNCTION(BlueprintCallable, Category = "Ability|Container")
+	static void AssignTagSetByCallerMagnitudeContainerSpec(UPARAM(ref) FAxGameplayEffectContainerSpec& ContainerSpec, FGameplayTag DataTag, float Magnitude);
+
 	/** Create a handle for filtering target data, filling out all fields */
 	UFUNCTION(BlueprintCallable, Category = "Filter")
 	static FGameplayTargetDataFilterHandle MakeAxFilterHandle(FAxGameplayTargetDataFilter Filter, AActor* FilterActor);

@@ -1,7 +1,7 @@
 // (C) 2021 Jay Murray
 
 #include "AxWeapons.h"
-#include "Logging.h"
+#include "AxWeaponsDebug.h"
 
 #include "Modules/ModuleManager.h"
 
