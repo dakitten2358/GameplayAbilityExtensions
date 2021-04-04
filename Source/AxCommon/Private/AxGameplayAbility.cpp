@@ -15,7 +15,7 @@ void UAxGameplayAbility::OnAvatarSet(const FGameplayAbilityActorInfo* ActorInfo,
 		bool ActivatedAbility = ActorInfo->AbilitySystemComponent->TryActivateAbility(Spec.Handle, false);
 		if (!ActivatedAbility)
 		{
-			UE_LOG(LogAxCommon, Warning, TEXT("Failed to auto-activated ability on %s"), *ActorInfo->OwnerActor->GetName());
+			UE_LOG(LogAxCommon, Warning, TEXT("Failed to auto-activated ability %s on %s"), *UAxGameplayAbility::GetDebugName(Spec.Ability), *ActorInfo->OwnerActor->GetName());
 		}
 	}
 }
@@ -116,4 +116,12 @@ FGameplayAbilityTargetDataHandle UAxGameplayAbility::MakeTargetDataFromActor(AAc
 	}
 
 	return TargetDataHandle;
+}
+
+FString UAxGameplayAbility::GetDebugName(const UGameplayAbility* Ability)
+{ 
+	if (Ability == nullptr)
+		return TEXT("nullptr");
+
+	return Ability->GetName();
 }

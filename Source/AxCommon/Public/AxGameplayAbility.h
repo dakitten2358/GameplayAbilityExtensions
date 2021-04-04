@@ -39,6 +39,9 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Effects")
 	TMap<FGameplayTag, FAxGameplayEffectContainer> EffectContainerMap;
 
+	/** Retrieves actor's name used for logging, or string "NULL" if Actor is null */
+	static FString GetDebugName(const UGameplayAbility* Ability);
+
 protected:
 	// Make gameplay effect container spec to be applied later, using the passed in container
 	UFUNCTION(BlueprintCallable, Category = Ability, meta = (AutoCreateRefTerm = "EventData"))
