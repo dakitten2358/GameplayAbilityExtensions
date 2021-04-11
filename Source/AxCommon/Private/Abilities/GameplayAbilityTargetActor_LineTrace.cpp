@@ -211,7 +211,7 @@ bool AGameplayAbilityTargetActor_LineTrace::LineTraceWithFilter(TArray<FHitResul
 		for (int32 HitIdx = 0; HitIdx < HitResults.Num(); ++HitIdx)
 		{
 			FHitResult& Hit = HitResults[HitIdx];
-			if (!Hit.Actor.IsValid() || FilterHandle.FilterPassesForActor(Hit.Actor) && !IsAlreadyInHitResults(FilteredHitResults, Hit.Actor))
+			if (!Hit.Actor.IsValid() || (FilterHandle.FilterPassesForActor(Hit.Actor) && !IsAlreadyInHitResults(FilteredHitResults, Hit.Actor)))
 			{
 				Hit.TraceStart = TraceStart;
 				Hit.TraceEnd = End;
