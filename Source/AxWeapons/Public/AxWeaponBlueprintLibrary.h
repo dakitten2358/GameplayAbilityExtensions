@@ -19,4 +19,10 @@ class AXWEAPONS_API UAxWeaponBlueprintLibrary : public UBlueprintFunctionLibrary
 public:
 	UFUNCTION(BlueprintCallable, BlueprintPure=false, Category=Targeting, Meta=(ExpandBoolAsExecs="ReturnValue"))
 	static bool FindBlockingHitResult(FGameplayAbilityTargetDataHandle TargetData, FHitResult& OutBlockingHitResult);
+
+	UFUNCTION(BlueprintPure)
+	static float GetMeleeHitDirection(AActor* Target, AActor* Source);
+
+	UFUNCTION(BlueprintPure)
+	static FVector GetMeleeHitVector(AActor* Target, AActor* Source);
 };
