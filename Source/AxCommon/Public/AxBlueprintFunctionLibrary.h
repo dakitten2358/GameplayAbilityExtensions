@@ -67,6 +67,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Filter")
 	static FGameplayTargetDataFilterHandle MakeAxFilterHandle(FAxGameplayTargetDataFilter Filter, AActor* FilterActor);
 
+	UFUNCTION(BlueprintPure, Category = "Filter")
+	static FGameplayTargetDataFilterHandle MakeAxTeamFilterHandle(FAxGameplayTargetDataTeamFilter Filter, AActor* FilterActor);
+
 	UFUNCTION(BlueprintCallable, Category="Rendering|Debug", meta=(WorldContext="WorldContextObject", DevelopmentOnly))
 	static void DrawDebugHitResult(const UObject* WorldContextObject, const FHitResult& HitResult);
 

@@ -23,3 +23,21 @@ bool FAxGameplayTargetDataFilter::FilterPassesForActor(const AActor* ActorToBeFi
 	}
 	return bFilterResult;
 }
+
+bool FAxGameplayTargetDataTeamFilter::FilterPassesForActor(const AActor* ActorToBeFiltered) const
+{
+	bool bFilterResult = Super::FilterPassesForActor(ActorToBeFiltered);
+	if (bFilterResult)
+	{
+		// does this actor have a team agent interface
+		if (SelfActor->GetClass()->ImplementsInterface(UGenericTeamAgentInterface::StaticClass()))
+		{
+			ETeamAttitude::Type AttitudeTowards = Cast<IGenericTeamAgentInterface>(SelfActor)->GetTeamAttitudeTowards(*ActorToBeFiltered);
+			return (bReverseTeamAttitude ^ (TeamAttitude == AttitudeTowards));
+		}
+
+		UE_LOG(LogAxCommon, Warning, TEXT("Tried to filter for %s that didn't support IGenericTeamAgentInterface"), *AActor::GetDebugName(ActorToBeFiltered));
+		return false;
+	}
+	return bFilterResult;
+}

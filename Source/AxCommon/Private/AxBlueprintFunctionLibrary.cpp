@@ -153,6 +153,15 @@ FGameplayTargetDataFilterHandle UAxBlueprintFunctionLibrary::MakeAxFilterHandle(
 	return FilterHandle;
 }
 
+FGameplayTargetDataFilterHandle UAxBlueprintFunctionLibrary::MakeAxTeamFilterHandle(FAxGameplayTargetDataTeamFilter Filter, AActor* FilterActor)
+{
+	FGameplayTargetDataFilterHandle FilterHandle;
+	FAxGameplayTargetDataTeamFilter* NewFilter = new FAxGameplayTargetDataTeamFilter(Filter);
+	NewFilter->InitializeFilterContext(FilterActor);
+	FilterHandle.Filter = TSharedPtr<FGameplayTargetDataFilter>(NewFilter);
+	return FilterHandle;
+}
+
 void UAxBlueprintFunctionLibrary::DrawDebugHitResult(const UObject* WorldContextObject, const FHitResult& HitResult)
 {
 #if ENABLE_DRAW_DEBUG
