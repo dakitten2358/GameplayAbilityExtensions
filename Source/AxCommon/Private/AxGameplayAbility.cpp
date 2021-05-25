@@ -29,6 +29,20 @@ void UAxGameplayAbility::ExternalEndAbility()
 	EndAbility(CurrentSpecHandle, CurrentActorInfo, CurrentActivationInfo, bReplicateEndAbility, bWasCancelled);
 }
 
+void UAxGameplayAbility::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData)
+{
+	// Check to see if we were triggered form an event, we have a blueprint implementation of it
+	// and we want to prefer using that
+	if (bHasBlueprintActivateFromEvent && TriggerEventData && bPreferEventActivation)
+	{
+		// A Blueprinted ActivateAbility function must call CommitAbility somewhere in its execution chain.
+		K2_ActivateAbilityFromEvent(*TriggerEventData);
+		return;
+	}
+
+	return Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
+}
+
 bool UAxGameplayAbility::TryActivateAbilityBatched(FGameplayAbilitySpecHandle InAbilityHandle, bool EndAbilityImmediately)
 {
 	UAxAbilitySystemComponent* AbilitySystem = Cast<UAxAbilitySystemComponent>(GetAbilitySystemComponentFromActorInfo());

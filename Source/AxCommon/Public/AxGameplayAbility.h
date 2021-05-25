@@ -24,11 +24,16 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Ability")
 	virtual bool TryActivateAbilityBatched(FGameplayAbilitySpecHandle InAbilityHandle, bool EndAbilityImmediately);
 
+	virtual void ActivateAbility(const FGameplayAbilitySpecHandle Handle, const FGameplayAbilityActorInfo* ActorInfo, const FGameplayAbilityActivationInfo ActivationInfo, const FGameplayEventData* TriggerEventData) override;
+
 	void ExternalEndAbility();
 public:
 	// Tells an ability to activate immediately when its granted. Used for passive abilities and abilites forced on others.
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Ability")
 	bool bActivateAbilityOnGranted;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Ability")
+	bool bPreferEventActivation;
 
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "Input", meta=(DisplayName="Active on InputAction"))
 	bool bActivateAbilityOnInputAction = true;
