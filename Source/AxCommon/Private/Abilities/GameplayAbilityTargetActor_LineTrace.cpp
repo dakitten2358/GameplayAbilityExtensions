@@ -211,7 +211,7 @@ bool AGameplayAbilityTargetActor_LineTrace::LineTraceWithFilter(TArray<FHitResul
 		for (int32 HitIdx = 0; HitIdx < HitResults.Num(); ++HitIdx)
 		{
 			FHitResult& Hit = HitResults[HitIdx];
-			if (!Hit.Actor.IsValid() || (FilterHandle.FilterPassesForActor(Hit.Actor) && !IsAlreadyInHitResults(FilteredHitResults, Hit.Actor)))
+			if (Hit.GetActor() == nullptr || (FilterHandle.FilterPassesForActor(Hit.GetActor()) && !IsAlreadyInHitResults(FilteredHitResults, Hit.GetActor())))
 			{
 				Hit.TraceStart = TraceStart;
 				Hit.TraceEnd = End;
@@ -229,7 +229,7 @@ bool AGameplayAbilityTargetActor_LineTrace::IsAlreadyInHitResults(const TArray<F
 {
 	const AActor* ActorToCheck = ActorToCheckPtr.Get();
 	for(const auto& HitResult : HitResults)
-		if (HitResult.Actor == ActorToCheck)
+		if (HitResult.GetActor() == ActorToCheck)
 			return true;
 	return false;
 }
@@ -430,13 +430,13 @@ void AGameplayAbilityTargetActor_LineTrace::UpdateReticleActorFromHitResult(int3
 	{
 		if (AGameplayAbilityWorldReticle* LocalReticleActor = ReticleActors[ReticleIndex].Get())
 		{
-			const bool bHitActor = HitResult.Actor != nullptr;
+			const bool bHitActor = HitResult.GetActor() != nullptr;
 
 			if (bHitActor && !HitResult.bBlockingHit)
 			{
 				LocalReticleActor->SetActorHiddenInGame(false);
 
-				const FVector ReticleLocation = (bHitActor && LocalReticleActor->bSnapToTargetedActor) ? HitResult.Actor->GetActorLocation() : (FVector)HitResult.Location;
+				const FVector ReticleLocation = (bHitActor && LocalReticleActor->bSnapToTargetedActor) ? HitResult.GetActor()->GetActorLocation() : (FVector)HitResult.Location;
 
 				LocalReticleActor->SetActorLocation(ReticleLocation);
 				LocalReticleActor->SetIsTargetAnActor(bHitActor);
