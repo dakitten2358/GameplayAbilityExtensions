@@ -18,16 +18,16 @@ public:
 
 protected:
 	UPROPERTY(Transient, BlueprintReadOnly, Category = "Gameplay", meta=(ExposeOnSpawn=true))
-	class UAbilitySystemComponent* OwningAbilitySystemComponent;
+	TObjectPtr<class UAbilitySystemComponent> OwningAbilitySystemComponent;
 
 	UPROPERTY(Transient, BlueprintReadOnly, Category = "Gameplay", meta=(ExposeOnSpawn=true))
-	class AActor* EffectCauser;
+	TObjectPtr<class AActor> EffectCauser;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	class UProjectileMovementComponent* ProjectileMovement;
+	TObjectPtr<class UProjectileMovementComponent> ProjectileMovement;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	class UCapsuleComponent* CapsuleComponent;
+	TObjectPtr<class UCapsuleComponent> CapsuleComponent;
 
 private:
 	static FName CapsuleComponentName;

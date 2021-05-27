@@ -39,7 +39,7 @@ public:
 	bool bActivateAbilityOnInputAction = true;
 
 	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category = "Input")
-	const UInputAction* AbilityInputAction;
+	TObjectPtr<const UInputAction> AbilityInputAction;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Effects")
 	TMap<FGameplayTag, FAxGameplayEffectContainer> EffectContainerMap;

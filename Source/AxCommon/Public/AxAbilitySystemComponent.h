@@ -51,7 +51,7 @@ private:
 	bool bHasCachedInputActions;
 
 	UPROPERTY()
-	TArray<const class UInputAction*> CachedInputActions;
+	TArray<TObjectPtr<const class UInputAction>> CachedInputActions;
 
 	TMap<UInputComponent*, TArray<uint32>> BoundActionsByComponent;
 };

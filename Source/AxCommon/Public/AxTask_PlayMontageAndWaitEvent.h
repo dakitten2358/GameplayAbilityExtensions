@@ -75,7 +75,7 @@ public:
 private:
 	/** Montage that is playing */
 	UPROPERTY()
-	UAnimMontage* MontageToPlay;
+	TObjectPtr<UAnimMontage> MontageToPlay;
 
 	/** List of tags to match against gameplay events */
 	UPROPERTY()
