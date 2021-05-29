@@ -42,6 +42,9 @@ public:
 	/** Adds new targets to target data */
 	void AddTargets(const TArray<FGameplayAbilityTargetDataHandle>& TargetData, const TArray<FHitResult>& HitResults, const TArray<AActor*>& TargetActors);
 
+	/** Add a single FGameplayAbilityTargetDataHandle to the target data */
+	void AddTargetData(const FGameplayAbilityTargetDataHandle& InTargetData);
+
 	void AddTargetActor(const TWeakObjectPtr<AActor>& TargetActor);
 	void AddTargetHitResult(const FHitResult& HitResult);
 

@@ -31,6 +31,11 @@ void FAxGameplayEffectContainerSpec::AddTargets(const TArray<FGameplayAbilityTar
 	}
 }
 
+void FAxGameplayEffectContainerSpec::AddTargetData(const FGameplayAbilityTargetDataHandle& InTargetData)
+{
+	TargetData.Append(InTargetData);
+}
+
 void FAxGameplayEffectContainerSpec::AddTargetActor(const TWeakObjectPtr<AActor>& TargetActor)
 {
 	if (TargetActor.IsValid())
