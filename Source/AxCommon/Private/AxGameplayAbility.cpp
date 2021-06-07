@@ -114,7 +114,7 @@ TArray<FActiveGameplayEffectHandle> UAxGameplayAbility::ApplyEffectContainerSpec
 }
 
 
-FGameplayAbilityTargetDataHandle UAxGameplayAbility::MakeTargetDataFromActor(AActor* TargetActor)
+FGameplayAbilityTargetDataHandle UAxGameplayAbility::MakeTargetDataFromActor(AActor* TargetActor, bool bShouldReplicateDataToServer, bool bCreateKeyIfNotValidForMorePredicting)
 {
 	TArray<TWeakObjectPtr<AActor>> TargetActors;
 	TargetActors.Add(TargetActor);
@@ -123,10 +123,14 @@ FGameplayAbilityTargetDataHandle UAxGameplayAbility::MakeTargetDataFromActor(AAc
 	FGameplayAbilityTargetDataHandle TargetDataHandle = targetingLocationInfo.MakeTargetDataHandleFromActors(TargetActors);
 
 	UAbilitySystemComponent* OwningASC = GetAbilitySystemComponentFromActorInfo();
-	if (OwningASC)	
+	if (OwningASC && IsPredictingClient())
 	{
+		FScopedPredictionWindow	ScopedPrediction(
+			OwningASC,
+			bShouldReplicateDataToServer && (bCreateKeyIfNotValidForMorePredicting && !OwningASC->ScopedPredictionKey.IsValidForMorePrediction()));
+
 		FGameplayTag ApplicationTag;
-		OwningASC->ServerSetReplicatedTargetData(GetCurrentAbilitySpecHandle(), GetCurrentActivationInfo().GetActivationPredictionKey(), TargetDataHandle, ApplicationTag, OwningASC->ScopedPredictionKey);
+		OwningASC->CallServerSetReplicatedTargetData(GetCurrentAbilitySpecHandle(), GetCurrentActivationInfo().GetActivationPredictionKey(), TargetDataHandle, ApplicationTag, OwningASC->ScopedPredictionKey);
 	}
 
 	return TargetDataHandle;

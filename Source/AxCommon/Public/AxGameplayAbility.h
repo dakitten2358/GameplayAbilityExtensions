@@ -61,5 +61,5 @@ protected:
 	virtual TArray<FActiveGameplayEffectHandle> ApplyEffectContainerSpec(const FAxGameplayEffectContainerSpec& ContainerSpec);
 
 	UFUNCTION(BlueprintCallable, Category = "Target")
-	virtual FGameplayAbilityTargetDataHandle MakeTargetDataFromActor(AActor* TargetActor);
+	virtual FGameplayAbilityTargetDataHandle MakeTargetDataFromActor(AActor* TargetActor, bool bShouldReplicateDataToServer = true, bool bCreateKeyIfNotValidForMorePredicting = true);
 };
