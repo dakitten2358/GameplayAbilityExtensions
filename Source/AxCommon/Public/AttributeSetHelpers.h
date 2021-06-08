@@ -87,6 +87,7 @@ public:
 	struct FGameplayModifierEvaluatedData& EvaluatedData;	// The 'flat'/computed data to be applied to the target
 
 	const struct FHitResult* HitResult;
+	const FGameplayEffectContextHandle Context;
 
 	FPostGameplayEffectExecuteData<CharacterType>(const struct FGameplayEffectModCallbackData& Data)
 		: Target(Data.Target)
@@ -94,8 +95,8 @@ public:
 		, EffectSpec(Data.EffectSpec)
 		, EvaluatedData(Data.EvaluatedData)
 		, HitResult(nullptr)
+		, Context(Data.EffectSpec.GetContext())
 	{
-		FGameplayEffectContextHandle Context = Data.EffectSpec.GetContext();
 		UAbilitySystemComponent* SourceAbility = Context.GetOriginalInstigatorAbilitySystemComponent();
 		Data.EffectSpec.GetAllAssetTags(EffectSpecAssetTags);
 		HitResult = Context.GetHitResult();		

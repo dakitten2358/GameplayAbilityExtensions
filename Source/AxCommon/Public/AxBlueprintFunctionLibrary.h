@@ -38,6 +38,8 @@ public:
 	UFUNCTION(BlueprintPure, Category = "Ability|GameplayCue", meta = (NativeMakeFunc, AdvancedDisplay=2, GameplayEffectLevel = "1"))
 	static FGameplayCueParameters MakeGameplayCueParametersFromTargetData(FGameplayEffectContextHandle EffectContextHandle, const FGameplayAbilityTargetDataHandle& TargetDataHandle, int32 GameplayEffectLevel);
 
+	static FGameplayCueParameters MakeGameplayCueParametersFromGameplayEffectData(const struct FGameplayEffectModCallbackData& EffectData);
+
 	UFUNCTION(BlueprintCallable, Category = "Ability")
 	static UAxGameplayAbility* GetPrimaryAbilityInstanceFromHandle(UAbilitySystemComponent* AbilitySystemComponent, FGameplayAbilitySpecHandle Handle);
 

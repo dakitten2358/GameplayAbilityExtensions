@@ -3,6 +3,8 @@
 #include "AxGameplayEffectContainer.h"
 #include "AxCommonDebug.h"
 #include "AbilitySystemBlueprintLibrary.h"
+#include "GameplayEffectExtension.h"
+#include "AttributeSetHelpers.h"
 
 FGameplayAbilityTargetDataHandle UAxBlueprintFunctionLibrary::EffectContextGetTargetData(FGameplayEffectContextHandle EffectContextHandle)
 {
@@ -50,6 +52,39 @@ FGameplayCueParameters UAxBlueprintFunctionLibrary::MakeGameplayCueParametersFro
 	}
 	
 	Parameters.GameplayEffectLevel = GameplayEffectLevel;
+	return Parameters;
+}
+
+FGameplayCueParameters UAxBlueprintFunctionLibrary::MakeGameplayCueParametersFromGameplayEffectData(const FGameplayEffectModCallbackData& EffectData)
+{
+	FPostGameplayEffectExecuteData<AActor> Data(EffectData);
+	const FGameplayEffectContext* EffectContext = Data.Context.Get();
+	check(EffectContext);
+
+	FGameplayCueParameters Parameters;
+	Parameters.AbilityLevel = EffectContext->GetAbilityLevel();
+	Parameters.AggregatedSourceTags = Data.Source.Tags;
+	Parameters.EffectCauser = EffectContext->GetEffectCauser();
+	Parameters.EffectContext = Data.Context;
+	Parameters.Instigator = EffectContext->GetInstigator();
+
+	if (Data.HitResult)
+	{
+		Parameters.Location = Data.HitResult->Location;
+		Parameters.Normal = Data.HitResult->Normal;
+		Parameters.PhysicalMaterial = Data.HitResult->PhysMaterial;
+	}
+	else
+	{
+		Parameters.Location = Data.Target.Actor->GetActorLocation();
+		Parameters.Normal = FVector::UpVector;
+		Parameters.PhysicalMaterial = nullptr;
+	}
+
+	Parameters.RawMagnitude = EffectData.EvaluatedData.Magnitude;
+	Parameters.SourceObject = EffectContext->GetSourceObject();
+	Parameters.TargetAttachComponent = nullptr;
+
 	return Parameters;
 }
 
