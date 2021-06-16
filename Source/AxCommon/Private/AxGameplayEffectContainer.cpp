@@ -56,3 +56,11 @@ void FAxGameplayEffectContainerSpec::ClearTargets()
 {
 	TargetData.Clear();
 }
+
+void FAxGameplayEffectContainerSpec::SetSetByCallerMagnitude(FGameplayTag DataTag, float Magnitude)
+{
+	if (SetByCallerTagMagnitudes.Contains(DataTag))
+		SetByCallerTagMagnitudes[DataTag] = Magnitude;
+	else
+		SetByCallerTagMagnitudes.Add(DataTag, Magnitude);
+}

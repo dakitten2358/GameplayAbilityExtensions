@@ -108,6 +108,14 @@ TArray<FActiveGameplayEffectHandle> UAxGameplayAbility::ApplyEffectContainerSpec
 	// Iterate list of effect specs and apply them to their target data
 	for (const FGameplayEffectSpecHandle& SpecHandle : ContainerSpec.TargetGameplayEffectSpecs)
 	{
+		if (SpecHandle.IsValid())
+		{
+			for(const auto& kvp : ContainerSpec.SetByCallerTagMagnitudes)
+			{
+				SpecHandle.Data->SetSetByCallerMagnitude(kvp.Key, kvp.Value);
+			}
+			
+		}
 		AllEffects.Append(K2_ApplyGameplayEffectSpecToTarget(SpecHandle, ContainerSpec.TargetData));
 	}
 	return AllEffects;

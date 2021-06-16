@@ -25,6 +25,8 @@ struct AXCOMMON_API FAxGameplayEffectContainerSpec
 	GENERATED_BODY()
 
 public:
+	TMap<FGameplayTag, float> SetByCallerTagMagnitudes;
+
 	/** Computed target data */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = GameplayEffectContainer)
 	FGameplayAbilityTargetDataHandle TargetData;
@@ -50,4 +52,6 @@ public:
 
 	/** Clears target data */
 	void ClearTargets();
+
+	void SetSetByCallerMagnitude(FGameplayTag DataTag, float Magnitude);
 };
