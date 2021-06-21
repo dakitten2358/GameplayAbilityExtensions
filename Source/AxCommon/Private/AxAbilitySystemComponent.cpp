@@ -67,7 +67,11 @@ void UAxAbilitySystemComponent::OnInputActionStarted(const UInputAction* InputAc
 				else if (AxGameplayAbility->bActivateAbilityOnInputAction)
 				{
 					// Ability is not active, so try to activate it
-					TryActivateAbility(Spec.Handle);
+					bool bActivationSucceeded = TryActivateAbility(Spec.Handle);
+					if (!bActivationSucceeded)
+					{
+						UE_LOG(LogAxCommon, VeryVerbose, TEXT("OnInputActionStarted: Failed to activate %s"), *UAxGameplayAbility::GetDebugName(Spec.Ability));
+					}
 				}
 			}
 		}
