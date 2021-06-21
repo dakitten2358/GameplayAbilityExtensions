@@ -121,6 +121,26 @@ TArray<FActiveGameplayEffectHandle> UAxGameplayAbility::ApplyEffectContainerSpec
 	return AllEffects;
 }
 
+TArray<FActiveGameplayEffectHandle> UAxGameplayAbility::ApplyEffectContainerSpecToOwner(const FAxGameplayEffectContainerSpec& ContainerSpec)
+{
+	TArray<FActiveGameplayEffectHandle> AllEffects;
+
+	// Iterate list of effect specs and apply them to their target data
+	for (const FGameplayEffectSpecHandle& SpecHandle : ContainerSpec.TargetGameplayEffectSpecs)
+	{
+		if (SpecHandle.IsValid())
+		{
+			for(const auto& kvp : ContainerSpec.SetByCallerTagMagnitudes)
+			{
+				SpecHandle.Data->SetSetByCallerMagnitude(kvp.Key, kvp.Value);
+			}
+		}
+
+		FActiveGameplayEffectHandle ActiveHandle = K2_ApplyGameplayEffectSpecToOwner(SpecHandle);
+		AllEffects.Add(ActiveHandle);
+	}
+	return AllEffects;
+}
 
 FGameplayAbilityTargetDataHandle UAxGameplayAbility::MakeTargetDataFromActor(AActor* TargetActor, bool bShouldReplicateDataToServer, bool bCreateKeyIfNotValidForMorePredicting)
 {
