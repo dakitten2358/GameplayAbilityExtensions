@@ -12,7 +12,7 @@ void UAxGameplayAbility::OnAvatarSet(const FGameplayAbilityActorInfo* ActorInfo,
 
 	if (bActivateAbilityOnGranted)
 	{
-		bool ActivatedAbility = ActorInfo->AbilitySystemComponent->TryActivateAbility(Spec.Handle, false);
+		bool ActivatedAbility = ActorInfo->AbilitySystemComponent->InternalTryActivateAbility(Spec.Handle, FPredictionKey(), nullptr, nullptr, nullptr);
 		if (!ActivatedAbility)
 		{
 			UE_LOG(LogAxCommon, Warning, TEXT("Failed to auto-activated ability %s on %s"), *UAxGameplayAbility::GetDebugName(Spec.Ability), *ActorInfo->OwnerActor->GetName());
