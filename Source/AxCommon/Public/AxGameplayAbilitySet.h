@@ -45,9 +45,12 @@ public:
 	void Remove(class AActor* Actor, FAxGameplayAbilitySetHandles& AbilitySetHandles) const;
 
 protected:
-	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category = "Abilities")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Abilities")
 	TArray<TSubclassOf<class UGameplayAbility>> Abilities;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Effects")
 	TArray<TSubclassOf<class UGameplayEffect>> Effects;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Abilities")
+	bool bRemoveAbilitiesAfterActivation;
 };

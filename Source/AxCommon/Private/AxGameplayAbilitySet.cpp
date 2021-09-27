@@ -25,7 +25,9 @@ void UAxGameplayAbilitySet::Give(UAbilitySystemComponent* AbilitySystemComponent
 			continue;
 		}
 		int32 inputID = INDEX_NONE;
-		FGameplayAbilitySpecHandle AbilitySpecHandle = AbilitySystemComponent->GiveAbility(FGameplayAbilitySpec(AbilityClass, Level, inputID, SourceObject));
+		FGameplayAbilitySpec AbilitySpec = FGameplayAbilitySpec(AbilityClass, Level, inputID, SourceObject);
+		AbilitySpec.RemoveAfterActivation = bRemoveAbilitiesAfterActivation;
+		FGameplayAbilitySpecHandle AbilitySpecHandle = AbilitySystemComponent->GiveAbility(AbilitySpec);
 		OutAbilitySetHandles.AbilityHandles.Add(AbilitySpecHandle);
 	}
 
