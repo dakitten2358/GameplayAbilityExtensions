@@ -1,6 +1,7 @@
 #include "ModularPlayerController.h"
 #include "Components/GameFrameworkComponentManager.h"
 #include "Components/ControllerComponent.h"
+#include "AbilitySystemInterface.h"
 
 void AModularPlayerController::PreInitializeComponents()
 {
@@ -39,4 +40,32 @@ void AModularPlayerController::PlayerTick(float DeltaTime)
 	{
 		Component->PlayerTick(DeltaTime);
 	}
+}
+
+bool AModularPlayerController::IsLookInputIgnored() const
+{
+	bool isLookInputIgnored = Super::IsLookInputIgnored();
+	if (IgnoreLookInputTag.IsValid())
+	{
+		if (IAbilitySystemInterface* AbilitySystemInterface = GetPlayerState<IAbilitySystemInterface>())
+		{
+			if (AbilitySystemInterface->GetAbilitySystemComponent()->HasMatchingGameplayTag(IgnoreLookInputTag))
+				isLookInputIgnored = true;
+		}
+	}
+	return isLookInputIgnored;
+}
+
+bool AModularPlayerController::IsMoveInputIgnored() const
+{
+	bool isMoveInputIgnored = Super::IsMoveInputIgnored();
+	if (IgnoreMoveInputTag.IsValid())
+	{
+		if (IAbilitySystemInterface* AbilitySystemInterface = GetPlayerState<IAbilitySystemInterface>())
+		{
+			if (AbilitySystemInterface->GetAbilitySystemComponent()->HasMatchingGameplayTag(IgnoreMoveInputTag))
+				isMoveInputIgnored = true;
+		}
+	}
+	return isMoveInputIgnored;
 }
