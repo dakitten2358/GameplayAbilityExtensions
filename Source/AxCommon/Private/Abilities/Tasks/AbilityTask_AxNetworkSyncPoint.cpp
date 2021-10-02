@@ -72,7 +72,7 @@ void UAbilityTask_AxNetworkSyncPoint::Activate()
 
 void UAbilityTask_AxNetworkSyncPoint::SyncFinished()
 {
-	if (!IsPendingKill())
+	if (IsValid(this))
 	{
 		if (ShouldBroadcastAbilityTaskDelegates())
 		{

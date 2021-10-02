@@ -17,13 +17,13 @@ void UAnimNotify_SendGameplayEvent::Notify(USkeletalMeshComponent* MeshComp, UAn
 		return;
 
 	AActor* Actor = MeshComp->GetOwner();
-	if (Actor && !Actor->IsPendingKill())
+	if (IsValid(Actor))
 	{
 		IAbilitySystemInterface* AbilitySystemInterface = Cast<IAbilitySystemInterface>(Actor);
 		if (AbilitySystemInterface != nullptr)
 		{
 			UAbilitySystemComponent* AbilitySystemComponent = AbilitySystemInterface->GetAbilitySystemComponent();
-			if (AbilitySystemComponent != nullptr && !AbilitySystemComponent->IsPendingKill())
+			if (IsValid(AbilitySystemComponent))
 			{
 				FScopedPredictionWindow NewScopedWindow(AbilitySystemComponent, true);
 
