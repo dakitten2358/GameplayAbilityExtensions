@@ -4,13 +4,10 @@
 #define LOCTEXT_NAMESPACE "FAxInteractions"
 
 void FAxInteractions::StartupModule()
-{
-}
+{}
 
 void FAxInteractions::ShutdownModule()
-{
-	
-}
+{}
 
 #undef LOCTEXT_NAMESPACE
 	
