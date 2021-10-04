@@ -108,12 +108,37 @@ void AModularPawn::UnbindAbilitySystemFromInput()
 void AModularPawn::OnAbilitySystemAvailable()
 {
 	check(AbilitySystemComponent);
+	AddStartupGameplayAbilities();
 	K2_OnAbilitySystemAvailable();
 }
 
 void AModularPawn::OnAbilitySystemUnavailable()
 {
+	RemoveStartupGameplayAbilities();
 	K2_OnAbilitySystemUnavailable();
+}
+
+void AModularPawn::AddStartupGameplayAbilities()
+{
+	check(AbilitySystemComponent);
+	if (GetLocalRole() == ROLE_Authority && StartupAbilitySet && !StartupAbilitySetHandles.Any())
+	{
+		StartupAbilitySet->Give(GetAbilitySystemComponent(), this, GetPawnLevel(), StartupAbilitySetHandles);
+	}
+}
+
+void AModularPawn::RemoveStartupGameplayAbilities()
+{
+	check(AbilitySystemComponent);
+	if (GetLocalRole() == ROLE_Authority && StartupAbilitySet && StartupAbilitySetHandles.Any())
+	{
+		StartupAbilitySet->Remove(GetAbilitySystemComponent(), StartupAbilitySetHandles);
+	}
+}
+
+int AModularPawn::GetPawnLevel() const
+{
+	return 1;
 }
 
 UAbilitySystemComponent* AModularPawn::GetAbilitySystemComponent() const

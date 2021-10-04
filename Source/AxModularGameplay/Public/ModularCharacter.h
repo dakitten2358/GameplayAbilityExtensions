@@ -3,6 +3,7 @@
 #include "GameFramework/Character.h"
 #include "AbilitySystemInterface.h"
 #include "GameplayTagAssetInterface.h"
+#include "AxGameplayAbilitySet.h"
 #include "ModularCharacter.generated.h"
 
 /** Minimal class that supports extension by game feature plugins */
@@ -16,6 +17,12 @@ private:
 	TObjectPtr<class UAxAbilitySystemComponent> AbilitySystemComponent;
 
 	bool bIsAbilitySystemBoundToInput;
+
+	FAxGameplayAbilitySetHandles StartupAbilitySetHandles;
+
+protected:
+	UPROPERTY(EditAnywhere, Category = "Abilities")
+	TObjectPtr<UAxGameplayAbilitySet> StartupAbilitySet;
 
 public:
 	AModularCharacter(const FObjectInitializer& ObjectInitializer = FObjectInitializer());
@@ -47,6 +54,11 @@ public:
 protected:
 	virtual void OnAbilitySystemAvailable();
 	virtual void OnAbilitySystemUnavailable();
+
+	virtual void AddStartupGameplayAbilities();
+	virtual void RemoveStartupGameplayAbilities();
+
+	virtual int GetCharacterLevel() const;
 
 	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable, meta=(DisplayName="OnAbilitySystemAvailable", ScriptName="OnAbilitySystemAvailable"))
 	void K2_OnAbilitySystemAvailable();

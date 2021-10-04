@@ -108,12 +108,37 @@ void AModularCharacter::UnbindAbilitySystemFromInput()
 void AModularCharacter::OnAbilitySystemAvailable()
 {
 	check(AbilitySystemComponent);
+	AddStartupGameplayAbilities();
 	K2_OnAbilitySystemAvailable();
 }
 
 void AModularCharacter::OnAbilitySystemUnavailable()
 {
+	RemoveStartupGameplayAbilities();
 	K2_OnAbilitySystemUnavailable();
+}
+
+void AModularCharacter::AddStartupGameplayAbilities()
+{
+	check(AbilitySystemComponent);
+	if (GetLocalRole() == ROLE_Authority && StartupAbilitySet && !StartupAbilitySetHandles.Any())
+	{
+		StartupAbilitySet->Give(GetAbilitySystemComponent(), this, GetCharacterLevel(), StartupAbilitySetHandles);
+	}
+}
+
+void AModularCharacter::RemoveStartupGameplayAbilities()
+{
+	check(AbilitySystemComponent);
+	if (GetLocalRole() == ROLE_Authority && StartupAbilitySet && StartupAbilitySetHandles.Any())
+	{
+		StartupAbilitySet->Remove(GetAbilitySystemComponent(), StartupAbilitySetHandles);
+	}
+}
+
+int AModularCharacter::GetCharacterLevel() const
+{
+	return 1;
 }
 
 UAbilitySystemComponent* AModularCharacter::GetAbilitySystemComponent() const
