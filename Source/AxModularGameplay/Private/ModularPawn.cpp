@@ -9,7 +9,9 @@ AModularPawn::AModularPawn(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
 	, AbilitySystemComponent(nullptr)
 	, bIsAbilitySystemBoundToInput(false)
-{}
+{
+	AIControllerClass = AModularAIController::StaticClass();
+}
 
 void AModularPawn::PreInitializeComponents()
 {

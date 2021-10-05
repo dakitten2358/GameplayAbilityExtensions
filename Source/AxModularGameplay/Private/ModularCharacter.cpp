@@ -9,7 +9,9 @@ AModularCharacter::AModularCharacter(const FObjectInitializer& ObjectInitializer
 	: Super(ObjectInitializer)
 	, AbilitySystemComponent(nullptr)
 	, bIsAbilitySystemBoundToInput(false)
-{}
+{
+	AIControllerClass = AModularAIController::StaticClass();
+}
 
 void AModularCharacter::PreInitializeComponents()
 {
