@@ -54,4 +54,6 @@ private:
 	TArray<TObjectPtr<const class UInputAction>> CachedInputActions;
 
 	TMap<UInputComponent*, TArray<uint32>> BoundActionsByComponent;
+
+	friend class UAxAbilitySystemTestHelper;
 };
