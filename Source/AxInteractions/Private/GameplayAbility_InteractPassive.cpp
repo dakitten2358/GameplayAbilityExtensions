@@ -98,11 +98,12 @@ void UGameplayAbility_InteractPassive::OnInteractionInputPressed(float TimeWaite
 	}
 
 	AActor* CurrentInteractionTargetActor = GetInteractionInterface(CurrentInteractionTarget);
-	FGameplayTag EventTag = IAxInteractionInterface::Execute_GetStartInteractionEvent(CurrentInteractionTargetActor);
-	FGameplayEventData Payload;
+
+	FGameplayEventData Payload = IAxInteractionInterface::Execute_GetStartInteractionEventData(CurrentInteractionTargetActor);
+	Payload.Instigator = GetAvatarActorFromActorInfo();
 	Payload.Target = CurrentInteractionTargetActor;
 	Payload.TargetData = CurrentInteractionTarget;
-	SendGameplayEvent(EventTag, Payload);
+	SendGameplayEvent(Payload.EventTag, Payload);
 
 	K2_OnInteractionStart(CurrentInteractionTarget);
 }

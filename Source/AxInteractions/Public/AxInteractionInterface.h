@@ -2,7 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
-#include "GameplayTagContainer.h"
+#include "Abilities/GameplayAbilityTypes.h"
 #include "AxInteractionInterface.generated.h"
 
 UINTERFACE(MinimalAPI)
@@ -20,7 +20,7 @@ public:
 	bool IsInteractionTarget();
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = Interaction)
-	FGameplayTag GetStartInteractionEvent();
+	FGameplayEventData GetStartInteractionEventData();
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = Interaction)
 	void StartInteractionHighlighting();
