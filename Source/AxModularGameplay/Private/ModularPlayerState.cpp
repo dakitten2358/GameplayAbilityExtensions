@@ -57,7 +57,7 @@ void AModularPlayerState::Reset()
 
 void AModularPlayerState::CopyProperties(APlayerState* PlayerState)
 {
-	Super::Reset();
+	Super::CopyProperties(PlayerState);
 
 	TArray<UPlayerStateComponent*> ModularComponents;
 	GetComponents(ModularComponents);
