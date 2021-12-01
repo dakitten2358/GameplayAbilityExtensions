@@ -99,7 +99,7 @@ void UGameplayAbility_InteractPassive::OnInteractionInputPressed(float TimeWaite
 
 	AActor* CurrentInteractionTargetActor = GetInteractionInterface(CurrentInteractionTarget);
 
-	FGameplayEventData Payload = IAxInteractionInterface::Execute_GetStartInteractionEventData(CurrentInteractionTargetActor);
+	FGameplayEventData Payload = IAxInteractionInterface::Execute_GetStartInteractionEventData(CurrentInteractionTargetActor, GetOwningActorFromActorInfo());
 	Payload.Instigator = GetAvatarActorFromActorInfo();
 	Payload.Target = CurrentInteractionTargetActor;
 	Payload.TargetData = CurrentInteractionTarget;
@@ -144,14 +144,14 @@ void UGameplayAbility_InteractPassive::SetNewInteractionTarget(const FGameplayAb
 	if (AActor* NewInteractionTargetActor = GetInteractionInterface(Data))
 	{
 		CurrentInteractionTarget = Data;
-		IAxInteractionInterface::Execute_StartInteractionHighlighting(NewInteractionTargetActor);
+		IAxInteractionInterface::Execute_StartInteractionHighlighting(NewInteractionTargetActor, GetOwningActorFromActorInfo());
 	}
 }
 
 void UGameplayAbility_InteractPassive::ClearInteractionTarget()
 {
 	if (AActor* ExistingInteractionTargetActor = GetInteractionInterface(CurrentInteractionTarget))
-		IAxInteractionInterface::Execute_StopInteractionHighlighting(ExistingInteractionTargetActor);
+		IAxInteractionInterface::Execute_StopInteractionHighlighting(ExistingInteractionTargetActor, GetOwningActorFromActorInfo());
 
 	CurrentInteractionTarget.Clear();
 }

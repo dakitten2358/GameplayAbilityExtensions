@@ -39,6 +39,12 @@ void AAxInteractionTargetActor::CheckForInteractionTarget(FHitResult& OutHitResu
 
 FGameplayAbilityTargetDataHandle AAxInteractionTargetActor::MakeTargetData(const FHitResult& HitResult) const
 {
-	/** Note: This will be cleaned up by the FGameplayAbilityTargetDataHandle (via an internal TSharedPtr) */
-	return StartLocation.MakeTargetDataHandleFromHitResult(OwningAbility, HitResult);
+	if (HitResult.IsValidBlockingHit())
+	{
+		/** Note: This will be cleaned up by the FGameplayAbilityTargetDataHandle (via an internal TSharedPtr) */
+		return StartLocation.MakeTargetDataHandleFromHitResult(OwningAbility, HitResult);
+	}
+
+	TArray<FHitResult> EmptyHitResults;
+	return StartLocation.MakeTargetDataHandleFromHitResults(OwningAbility, EmptyHitResults);
 }

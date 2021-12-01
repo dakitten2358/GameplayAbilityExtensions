@@ -52,7 +52,7 @@ void UAxTask_WaitInteractionTargetData::UpdateInteractionTarget()
 			if (TargetHitResult.GetActor() && TargetHitResult.GetActor()->Implements<UAxInteractionInterface>())
 			{
 				// it does implement the interface, but can we currently interact with it?
-				TargetHitResult.bBlockingHit = IAxInteractionInterface::Execute_IsInteractionTarget(TargetHitResult.GetActor());
+				TargetHitResult.bBlockingHit = IAxInteractionInterface::Execute_IsInteractionTarget(HitActor, GetOwnerActor());
 			}
 			else
 			{

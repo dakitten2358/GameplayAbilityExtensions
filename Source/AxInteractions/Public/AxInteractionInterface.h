@@ -17,14 +17,14 @@ class AXINTERACTIONS_API IAxInteractionInterface
 
 public:
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = Interaction)
-	bool IsInteractionTarget();
+	bool IsInteractionTarget(const AActor* Actor);
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = Interaction)
-	FGameplayEventData GetStartInteractionEventData();
+	FGameplayEventData GetStartInteractionEventData(const AActor* Actor);
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = Interaction)
-	void StartInteractionHighlighting();
+	void StartInteractionHighlighting(const AActor* Actor);
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = Interaction)
-	void StopInteractionHighlighting();
+	void StopInteractionHighlighting(const AActor* Actor);
 };
