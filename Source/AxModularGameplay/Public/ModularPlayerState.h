@@ -3,6 +3,7 @@
 #include "GameFramework/PlayerState.h"
 #include "AbilitySystemInterface.h"
 #include "GameplayTagAssetInterface.h"
+#include "Components/PlayerStateComponent.h"
 #include "ModularPlayerState.generated.h"
 
 /** Minimal class that supports extension by game feature plugins */
@@ -41,6 +42,16 @@ public:
 
 protected:
 	//~ Begin APlayerState interface
-	virtual void CopyProperties(APlayerState* PlayerState);
+	virtual void CopyProperties(APlayerState* PlayerState) override;
+	virtual void OverrideWith(APlayerState* PlayerState) override;
 	//~ End APlayerState interface
+};
+
+UCLASS()
+class AXMODULARGAMEPLAY_API UModularPlayerStateComponent : public UPlayerStateComponent
+{
+	GENERATED_BODY()
+
+public:
+	virtual void OverrideWith(UPlayerStateComponent* SourcePlayerStateComponent) {}
 };

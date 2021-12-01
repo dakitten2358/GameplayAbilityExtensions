@@ -74,6 +74,25 @@ void AModularPlayerState::CopyProperties(APlayerState* PlayerState)
 	}
 }
 
+void AModularPlayerState::OverrideWith(APlayerState* PlayerState)
+{
+	Super::OverrideWith(PlayerState);
+
+	TArray<UModularPlayerStateComponent*> ModularComponents;
+	GetComponents(ModularComponents);
+
+	TArray<UModularPlayerStateComponent*> OtherModularComponents;
+	PlayerState->GetComponents(OtherModularComponents);
+
+	for (UModularPlayerStateComponent* Component : ModularComponents)
+	{
+		for (UModularPlayerStateComponent* OtherComponent : OtherModularComponents)
+		{
+			Component->OverrideWith(OtherComponent);
+		}
+	}
+}
+
 UAbilitySystemComponent* AModularPlayerState::GetAbilitySystemComponent() const
 {
 	return AbilitySystemComponent;
