@@ -87,6 +87,11 @@ void UGameplayAbility_InteractPassive::OnInteractionComplete(FGameplayEventData 
 	{
 		StartWaitForInteractionInputReleased();
 	}
+
+	// make sure we let the interacted actor know the interaction is complete so that it can
+	// do things like destroy itself, etc.
+	if (IsValid(InteractionCompletedForActor))
+		IAxInteractionInterface::Execute_OnInteractionCompleted(InteractionCompletedForActor);
 }
 
 void UGameplayAbility_InteractPassive::OnInteractionInputPressed(float TimeWaited)

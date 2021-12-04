@@ -23,6 +23,9 @@ public:
 	FGameplayEventData GetStartInteractionEventData(const AActor* Actor);
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = Interaction)
+	void OnInteractionCompleted();
+
+	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = Interaction)
 	void StartInteractionHighlighting(const AActor* Actor);
 
 	UFUNCTION(BlueprintNativeEvent, BlueprintCallable, Category = Interaction)
