@@ -38,3 +38,14 @@ public:
 	bool bReverseTeamAttitude = false;
 };
 
+USTRUCT()
+struct AXCOMMON_API FAxGameplayTargetDataInterfaceFilter : public FGameplayTargetDataFilter
+{
+	GENERATED_BODY()
+
+public:
+	virtual bool FilterPassesForActor(const AActor* ActorToBeFiltered) const override;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, meta = (ExposeOnSpawn = true))
+	TObjectPtr<UClass> ImplementsInterface;
+};
