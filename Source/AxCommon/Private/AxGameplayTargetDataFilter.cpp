@@ -45,7 +45,5 @@ bool FAxGameplayTargetDataTeamFilter::FilterPassesForActor(const AActor* ActorTo
 bool FAxGameplayTargetDataInterfaceFilter::FilterPassesForActor(const AActor* ActorToBeFiltered) const
 {
 	bool bFilterResult = Super::FilterPassesForActor(ActorToBeFiltered);
-	if (bFilterResult && ActorToBeFiltered && ActorToBeFiltered->GetClass()->ImplementsInterface(ImplementsInterface))
-		return true;
-	return bFilterResult;
+	return bFilterResult && ActorToBeFiltered && ActorToBeFiltered->GetClass()->ImplementsInterface(ImplementsInterface);
 }
