@@ -42,6 +42,9 @@ bool FAxGameplayTargetDataTeamFilter::FilterPassesForActor(const AActor* ActorTo
 	return bFilterResult;
 }
 
+FAxGameplayTargetDataInterfaceFilter::FAxGameplayTargetDataInterfaceFilter()
+	: ImplementsInterface(nullptr) {}
+
 bool FAxGameplayTargetDataInterfaceFilter::FilterPassesForActor(const AActor* ActorToBeFiltered) const
 {
 	bool bFilterResult = Super::FilterPassesForActor(ActorToBeFiltered);

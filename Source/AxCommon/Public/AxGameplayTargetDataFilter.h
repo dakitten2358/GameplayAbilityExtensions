@@ -44,6 +44,7 @@ struct AXCOMMON_API FAxGameplayTargetDataInterfaceFilter : public FGameplayTarge
 	GENERATED_BODY()
 
 public:
+	FAxGameplayTargetDataInterfaceFilter();
 	virtual bool FilterPassesForActor(const AActor* ActorToBeFiltered) const override;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, meta = (ExposeOnSpawn = true))
