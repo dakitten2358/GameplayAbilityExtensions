@@ -48,5 +48,5 @@ public:
 	virtual bool FilterPassesForActor(const AActor* ActorToBeFiltered) const override;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, meta = (ExposeOnSpawn = true))
-	TObjectPtr<UClass> ImplementsInterface;
+	TSubclassOf<UInterface> ImplementsInterface;
 };
