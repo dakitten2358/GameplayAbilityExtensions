@@ -30,7 +30,7 @@ FHitResult AAxInteractionTargetActor_LineTrace::PerformTrace(AActor* InSourceAct
 	}
 
 #if ENABLE_DRAW_DEBUG
-	if (bDebug)
+	if (bDebug && false)
 	{
 		DrawLineTraceSingle(GetWorld(), TraceStart, TraceEnd, EDrawDebugTrace::Type::ForDuration, ReturnHitResult.bBlockingHit, ReturnHitResult, FLinearColor::Red, FLinearColor::Green, 0.1f);
 	}

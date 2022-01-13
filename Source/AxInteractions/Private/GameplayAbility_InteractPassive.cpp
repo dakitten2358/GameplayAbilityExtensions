@@ -5,6 +5,8 @@
 #include "Abilities/Tasks/AbilityTask_WaitInputRelease.h"
 #include "AxInteractioninterface.h"
 #include "AxInteractionTargetActor_LineTrace.h"
+#include "AbilitySystemComponent.h"
+#include "AxInteractionsDebug.h"
 
 const FName UGameplayAbility_InteractPassive::WaitInteractionTargetDataTaskName("WaitInteractionTargetData");
 
@@ -23,7 +25,7 @@ void UGameplayAbility_InteractPassive::ActivateAbility(const FGameplayAbilitySpe
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
 
 	const float TimerPeriod = 0.1f;
-	const bool bDebug = true;
+	const bool bDebug = false;
 
 	UWorld* World = GEngine->GetWorldFromContextObject(this, EGetWorldErrorMode::LogAndReturnNull);
 	InteractionTargetActor = World->SpawnActorDeferred<AAxInteractionTargetActor>(InteractionTargetActorClass, FTransform::Identity, nullptr, nullptr, ESpawnActorCollisionHandlingMethod::AlwaysSpawn);
@@ -102,15 +104,16 @@ void UGameplayAbility_InteractPassive::OnInteractionInputPressed(float TimeWaite
 		WaitInteractionInputPressed = nullptr;
 	}
 
-	AActor* CurrentInteractionTargetActor = GetInteractionInterface(CurrentInteractionTarget);
+	if (AActor* CurrentInteractionTargetActor = GetInteractionInterface(CurrentInteractionTarget))
+	{
+		FGameplayEventData Payload = IAxInteractionInterface::Execute_GetStartInteractionEventData(CurrentInteractionTargetActor, GetOwningActorFromActorInfo());
+		Payload.Instigator = GetAvatarActorFromActorInfo();
+		Payload.Target = CurrentInteractionTargetActor;
+		Payload.TargetData = CurrentInteractionTarget;
+		SendGameplayEvent(Payload.EventTag, Payload);
 
-	FGameplayEventData Payload = IAxInteractionInterface::Execute_GetStartInteractionEventData(CurrentInteractionTargetActor, GetOwningActorFromActorInfo());
-	Payload.Instigator = GetAvatarActorFromActorInfo();
-	Payload.Target = CurrentInteractionTargetActor;
-	Payload.TargetData = CurrentInteractionTarget;
-	SendGameplayEvent(Payload.EventTag, Payload);
-
-	K2_OnInteractionStart(CurrentInteractionTarget);
+		K2_OnInteractionStart(CurrentInteractionTarget);
+	}
 }
 
 void UGameplayAbility_InteractPassive::OnInteractionInputReleased(float TimeWaited)
@@ -174,6 +177,18 @@ AActor* UGameplayAbility_InteractPassive::GetInteractionInterface(const FGamepla
 				 {
 					return Actor;
 				 }
+			 }
+		 }
+	}
+
+// temp
+	if (const FGameplayAbilityTargetData* TargetData = Data.Get(Index))
+	{
+		 for(TWeakObjectPtr<AActor> ActorPtr : TargetData->GetActors())
+		 {
+			 if (AActor* Actor = ActorPtr.Get())
+			 {
+			 	UE_LOG(LogAxInteractions, Verbose, TEXT("Failed to find interaction interface on %s"), *AActor::GetDebugName(Actor));
 			 }
 		 }
 	}
