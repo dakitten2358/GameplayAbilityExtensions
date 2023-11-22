@@ -20,6 +20,6 @@ void UAxGameplayTargetProvider_UseEventData::GetTargets_Implementation(AActor* T
 	}
 	else if (EventData.Target)
 	{
-		OutActors.Add(const_cast<AActor*>(EventData.Target));
+		OutActors.Add(const_cast<AActor*>(EventData.Target.Get()));
 	}
 }

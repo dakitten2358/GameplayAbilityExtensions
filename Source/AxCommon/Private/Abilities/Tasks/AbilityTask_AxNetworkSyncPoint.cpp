@@ -10,7 +10,7 @@ UAbilityTask_AxNetworkSyncPoint::UAbilityTask_AxNetworkSyncPoint(const FObjectIn
 
 void UAbilityTask_AxNetworkSyncPoint::OnSignalCallback()
 {
-	if (AbilitySystemComponent)
+	if (AbilitySystemComponent.IsValid())
 	{
 		AbilitySystemComponent->ConsumeGenericReplicatedEvent(ReplicatedEventToListenFor, GetAbilitySpecHandle(), GetActivationPredictionKey());
 	}
@@ -26,9 +26,9 @@ UAbilityTask_AxNetworkSyncPoint* UAbilityTask_AxNetworkSyncPoint::AxWaitNetSync(
 
 void UAbilityTask_AxNetworkSyncPoint::Activate()
 {
-	FScopedPredictionWindow ScopedPrediction(AbilitySystemComponent, IsPredictingClient());
+	FScopedPredictionWindow ScopedPrediction(AbilitySystemComponent.Get(), IsPredictingClient());
 
-	if (AbilitySystemComponent)
+	if (AbilitySystemComponent.IsValid())
 	{
 		if (IsPredictingClient())
 		{

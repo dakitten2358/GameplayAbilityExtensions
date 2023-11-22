@@ -6,6 +6,7 @@
 #include "AbilitySystemComponent.h"
 #include "AbilitySystemGlobals.h"
 #include "Animation/AnimInstance.h"
+#include "AbilitySystemLog.h"
 
 UAxTask_PlayMontageAndWaitEvent::UAxTask_PlayMontageAndWaitEvent(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
@@ -112,7 +113,7 @@ void UAxTask_PlayMontageAndWaitEvent::Activate()
 
 	bool bPlayedMontage = false;
 
-	if (AbilitySystemComponent)
+	if (AbilitySystemComponent.IsValid())
 	{
 		const FGameplayAbilityActorInfo* ActorInfo = Ability->GetCurrentActorInfo();
 		UAnimInstance* AnimInstance = ActorInfo->GetAnimInstance();
@@ -171,7 +172,7 @@ void UAxTask_PlayMontageAndWaitEvent::Activate()
 
 void UAxTask_PlayMontageAndWaitEvent::ExternalCancel()
 {
-	check(AbilitySystemComponent);
+	check(AbilitySystemComponent.IsValid());
 
 	OnAbilityCancelled();
 
@@ -193,7 +194,7 @@ void UAxTask_PlayMontageAndWaitEvent::OnDestroy(bool AbilityEnded)
 		}
 	}
 
-	if (AbilitySystemComponent)
+	if (AbilitySystemComponent.IsValid())
 	{
 		AbilitySystemComponent->RemoveGameplayEventTagContainerDelegate(EventTags, EventHandle);
 	}
@@ -218,7 +219,7 @@ bool UAxTask_PlayMontageAndWaitEvent::StopPlayingMontage()
 
 	// Check if the montage is still playing
 	// The ability would have been interrupted, in which case we should automatically stop the montage
-	if (AbilitySystemComponent && Ability)
+	if (AbilitySystemComponent.IsValid() && Ability)
 	{
 		if (AbilitySystemComponent->GetAnimatingAbility() == Ability
 			&& AbilitySystemComponent->GetCurrentMontage() == MontageToPlay)

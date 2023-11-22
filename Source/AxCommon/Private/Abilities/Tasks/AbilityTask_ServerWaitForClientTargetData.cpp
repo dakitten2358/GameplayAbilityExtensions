@@ -41,7 +41,7 @@ void UAbilityTask_ServerWaitForClientTargetData::OnTargetDataReplicatedCallback(
 
 void UAbilityTask_ServerWaitForClientTargetData::OnDestroy(bool AbilityEnded)
 {
-	if (AbilitySystemComponent)
+	if (AbilitySystemComponent.IsValid())
 	{
 		FGameplayAbilitySpecHandle	SpecHandle = GetAbilitySpecHandle();
 		FPredictionKey ActivationPredictionKey = GetActivationPredictionKey();
