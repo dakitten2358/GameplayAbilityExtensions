@@ -1,6 +1,6 @@
 #  GameplayAbility Extensions
 
-*Fair Warning:  This is a C++ plugin for UE5*
+_*the Lyra example game includes pretty much everything here, except better*_
 
 Plugin for some common things I often find myself needing when working with the GameplayAbility plugin.  It's broken up into modules so that you can pick and choose what you need.
 
